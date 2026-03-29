@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Returns Logger</title>
+    <style>
+        :root {
+            --primary: #0052cc;
+            --background: #f4f5f7;
+            --surface: #ffffff;
+            --text: #172b4d;
+            --border: #dfe1e6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container {
+            background-color: var(--surface);
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px; /* 16px prevents auto-zoom on iOS */
+        }
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0043a6;
+        }
+        button:disabled {
+            background-color: #a5bdf0;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+            font-weight: bold;
+        }
+        .success { background-color: #e3fcef; color: #006644; display: block; }
+        .error { background-color: #ffebe6; color: #bf2600; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Return Package Log</h2>
+    <form id="return-form">
+        
+        <div class="form-group">
+            <label for="platform">Platform</label>
+            <select id="platform" name="platform" required>
+                <option value="" disabled selected>Select Platform...</option>
+                <option value="Amazon">Amazon</option>
+                <option value="Amazon Bazaar">Amazon Bazaar</option>
+                <option value="Flipkart">Flipkart</option>
+                <option value="Shopsy">Shopsy</option>
+                <option value="Meesho">Meesho</option>
+                <option value="ShopClues">ShopClues</option>
+                <option value="IBI Website">IBI Website</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="courier">Courier Name</label>
+            <select id="courier" name="courier" required>
+                <option value="" disabled selected>Select Courier...</option>
+                <option value="Amazon ATS">Amazon ATS</option>
+                <option value="eKart">eKart</option>
+                <option value="Delhivery">Delhivery</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="orderId">Order ID</label>
+            <input type="text" id="orderId" name="orderId" placeholder="e.g. 404-1234567-8901234" required>
+        </div>
+
+        <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input type="text" id="productName" name="productName" placeholder="Brief product description" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">From Address</label>
+            <textarea id="address" name="address" placeholder="Customer return address" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="condition">Condition of Package</label>
+            <select id="condition" name="condition" required>
+                <option value="" disabled selected>Select Condition...</option>
+                <option value="Good">Good</option>
+                <option value="Bad">Bad</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submit-btn">Submit Return Data</button>
+        <div id="status-message" class="message"></div>
+    </form>
+</div>
+
+<script>
+    // Set today's date automatically
+    document.getElementById('date').valueAsDate = new Date();
+
+    // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
+    const form = document.forms['return-form'];
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMessage = document.getElementById('status-message');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Submitting...';
+        statusMessage.className = 'message';
+        statusMessage.innerText = '';
+
+        // Send data to Google Sheets
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                // Success UI reset
+                statusMessage.innerText = 'Success! Package logged.';
+                statusMessage.className = 'message success';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit Return Data';
+                
+                // Reset form but keep today's date
+                form.reset();
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // Hide message after 3 seconds
+                setTimeout(() => { statusMessage.className = 'message'; }, 3000);
+            })
+            .catch(error => {
+                // Error UI
+                console.error('Error!', error.message);
+                statusMessage.innerText = 'Error saving data. Please try again.';
+                statusMessage.className = 'message error';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit Return Data';
+            });
+    });
+</script>
+
+</body>
+</html>
