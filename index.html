@@ -50,6 +50,7 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px; /* 16px prevents auto-zoom on iOS */
+            font-family: inherit;
         }
         textarea {
             resize: vertical;
@@ -117,8 +118,8 @@
         </div>
 
         <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" id="date" name="date" required>
+            <label for="dateTime">Entry Date & Time</label>
+            <input type="datetime-local" id="dateTime" name="dateTime" required>
         </div>
 
         <div class="form-group">
@@ -151,10 +152,18 @@
 </div>
 
 <script>
-    // Set today's date automatically
-    document.getElementById('date').valueAsDate = new Date();
+    // Function to set the current Date & Time automatically in the correct format
+    function setCurrentDateTime() {
+        const now = new Date();
+        // Adjust for local timezone offset to display correctly in the input field
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
+    }
 
-    // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+    // Call it immediately when the page loads
+    setCurrentDateTime();
+
+    // YOUR GOOGLE APPS SCRIPT WEB APP URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
     const form = document.forms['return-form'];
     const submitBtn = document.getElementById('submit-btn');
@@ -169,8 +178,12 @@
         statusMessage.className = 'message';
         statusMessage.innerText = '';
 
+        // Capture exact submission time in background just to be safe
+        const formData = new FormData(form);
+        formData.append('submissionTimestamp', new Date().toLocaleString());
+
         // Send data to Google Sheets
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        fetch(scriptURL, { method: 'POST', body: formData})
             .then(response => {
                 // Success UI reset
                 statusMessage.innerText = 'Success! Package logged.';
@@ -178,9 +191,9 @@
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Submit Return Data';
                 
-                // Reset form but keep today's date
+                // Reset form and re-apply fresh current date & time
                 form.reset();
-                document.getElementById('date').valueAsDate = new Date();
+                setCurrentDateTime();
                 
                 // Hide message after 3 seconds
                 setTimeout(() => { statusMessage.className = 'message'; }, 3000);
