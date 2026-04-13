@@ -49,9 +49,21 @@
             border: 1px solid var(--border);
             border-radius: 4px;
             box-sizing: border-box;
-            font-size: 16px; /* 16px prevents auto-zoom on iOS */
+            font-size: 16px; 
             font-family: inherit;
         }
+        
+        /* New Style for Locked/Read-Only Fields */
+        .locked-field {
+            background-color: #ebecf0;
+            color: #5e6c84;
+            cursor: not-allowed;
+            border: 1px solid #dfe1e6;
+        }
+        .locked-field:focus {
+            outline: none;
+        }
+
         textarea {
             resize: vertical;
             height: 80px;
@@ -118,8 +130,13 @@
         </div>
 
         <div class="form-group">
-            <label for="dateTime">Entry Date & Time</label>
-            <input type="datetime-local" id="dateTime" name="dateTime" required>
+            <label for="dateTime">System Entry Time (Auto-Locked)</label>
+            <input type="datetime-local" id="dateTime" name="dateTime" class="locked-field" readonly required>
+        </div>
+
+        <div class="form-group">
+            <label for="returnDate">Date of Return (Manual Selection)</label>
+            <input type="date" id="returnDate" name="returnDate" required>
         </div>
 
         <div class="form-group">
@@ -152,16 +169,18 @@
 </div>
 
 <script>
-    // Function to set the current Date & Time automatically in the correct format
+    // Function to set the current Date & Time automatically in the locked field
     function setCurrentDateTime() {
         const now = new Date();
-        // Adjust for local timezone offset to display correctly in the input field
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
         document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
     }
 
     // Call it immediately when the page loads
     setCurrentDateTime();
+    
+    // Set the Manual Return Date to default to today's date (but they can change it)
+    document.getElementById('returnDate').valueAsDate = new Date();
 
     // YOUR GOOGLE APPS SCRIPT WEB APP URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
@@ -172,20 +191,16 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
         
-        // Disable button and show loading state
         submitBtn.disabled = true;
         submitBtn.innerText = 'Submitting...';
         statusMessage.className = 'message';
         statusMessage.innerText = '';
 
-        // Capture exact submission time in background just to be safe
         const formData = new FormData(form);
         formData.append('submissionTimestamp', new Date().toLocaleString());
 
-        // Send data to Google Sheets
         fetch(scriptURL, { method: 'POST', body: formData})
             .then(response => {
-                // Success UI reset
                 statusMessage.innerText = 'Success! Package logged.';
                 statusMessage.className = 'message success';
                 submitBtn.disabled = false;
@@ -194,12 +209,11 @@
                 // Reset form and re-apply fresh current date & time
                 form.reset();
                 setCurrentDateTime();
+                document.getElementById('returnDate').valueAsDate = new Date(); // Reset manual date to today
                 
-                // Hide message after 3 seconds
                 setTimeout(() => { statusMessage.className = 'message'; }, 3000);
             })
             .catch(error => {
-                // Error UI
                 console.error('Error!', error.message);
                 statusMessage.innerText = 'Error saving data. Please try again.';
                 statusMessage.className = 'message error';
