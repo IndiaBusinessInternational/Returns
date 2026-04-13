@@ -4,54 +4,237 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IBI Returns Logger</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb; --primary-hover: #1d4ed8; --background: #f4f5f7;
-            --surface: #ffffff; --text: #172b4d; --border: #dfe1e6;
-            --locked-bg: #ebecf0; --locked-text: #5e6c84;
-            --history-bg: #f8fafc; --history-hover: #eff6ff; --danger: #ef4444;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-ring: rgba(37, 99, 235, 0.2);
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --locked-bg: #f1f5f9;
+            --locked-text: #64748b;
+            --history-bg: #f8fafc;
+            --history-hover: #f1f5f9;
+            --danger: #ef4444;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
+        
         body[data-theme="dark"] {
-            --primary: #3b82f6; --primary-hover: #60a5fa; --background: #0f172a;
-            --surface: #1e293b; --text: #f8fafc; --border: #334155;
-            --locked-bg: #020617; --locked-text: #94a3b8;
-            --history-bg: #0f172a; --history-hover: #1e293b; --danger: #f87171;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --primary-ring: rgba(59, 130, 246, 0.25);
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --locked-bg: #0f172a;
+            --locked-text: #94a3b8;
+            --history-bg: #0f172a;
+            --history-hover: #334155;
+            --danger: #f87171;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
-        * { font-family: 'Roboto', sans-serif; box-sizing: border-box; }
-        body { background-color: var(--background); color: var(--text); margin: 0; padding: 40px 16px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; font-size: 16px; }
-        .header-bar { width: 100%; max-width: 500px; display: flex; justify-content: flex-end; margin-bottom: 15px; }
-        .theme-toggle { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; }
-        .theme-toggle:hover { border-color: var(--primary); }
-        .form-container { background-color: var(--surface); padding: 24px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 500px; transition: 0.3s; }
-        h2 { margin-top: 0; text-align: center; font-size: 24px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; opacity: 0.9;}
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 16px; background-color: var(--surface); color: var(--text); transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        .locked-field { background-color: var(--locked-bg); color: var(--locked-text); cursor: not-allowed; border: 1px solid var(--border); }
-        textarea { resize: vertical; height: 80px; }
-        button.btn-submit { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
-        button.btn-submit:hover { background-color: var(--primary-hover); }
-        button.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-        .message { margin-top: 16px; padding: 12px; border-radius: 4px; text-align: center; display: none; font-weight: bold; font-size: 14px;}
-        .success { background-color: #e3fcef; color: #006644; display: block; }
-        .error { background-color: #ffebe6; color: #bf2600; display: block; }
-        .history-section { margin-top: 30px; border-top: 2px solid var(--border); padding-top: 16px; }
+
+        /* Apply Roboto globally */
+        * {
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 16px;
+        }
+
+        /* Top Theme Toggle */
+        .header-bar {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .theme-toggle:hover { 
+            border-color: var(--primary); 
+            transform: translateY(-1px);
+        }
+
+        /* Main Form Card */
+        .form-container {
+            background-color: var(--surface);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 520px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Branding Section */
+        .brand-container {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .brand-logo {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Helps the black banner pop */
+        }
+        h2 { 
+            margin: 0; 
+            font-size: 22px; 
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+        
+        /* Inputs & Labels */
+        .form-group { margin-bottom: 20px; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input, select, textarea {
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid var(--border);
+            border-radius: 8px; 
+            font-size: 16px; 
+            background-color: var(--background); /* Contrast against surface */
+            color: var(--text); 
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 3px var(--primary-ring);
+            background-color: var(--surface);
+        }
+
+        .locked-field {
+            background-color: var(--locked-bg); 
+            color: var(--locked-text); 
+            cursor: not-allowed; 
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        .locked-field:focus {
+            box-shadow: none;
+            border-color: var(--border);
+            background-color: var(--locked-bg);
+        }
+
+        textarea { resize: vertical; height: 90px; }
+        
+        /* Submit Button */
+        button.btn-submit {
+            width: 100%; 
+            padding: 16px; 
+            background-color: var(--primary); 
+            color: white;
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: 700;
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        button.btn-submit:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--primary-ring);
+        }
+        button.btn-submit:active { transform: translateY(0); }
+        button.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none;}
+        
+        /* Status Messages */
+        .message { 
+            margin-top: 20px; 
+            padding: 14px; 
+            border-radius: 8px; 
+            text-align: center; 
+            display: none; 
+            font-weight: 600; 
+            font-size: 14px;
+        }
+        .success { background-color: #dcfce7; color: #166534; display: block; border: 1px solid #bbf7d0;}
+        .error { background-color: #fee2e2; color: #991b1b; display: block; border: 1px solid #fecaca;}
+
+        /* Expanded Local History Memory Panel */
+        .history-section { 
+            margin-top: 32px; 
+            border-top: 2px solid var(--border); 
+            padding-top: 24px; 
+        }
+        
         .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .history-header h3 { font-size: 14px; color: var(--text); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; font-weight: 700;}
-        .btn-clear { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
+        .history-header h3 { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 0; font-weight: 700;}
+        
+        .btn-clear { 
+            background: transparent; border: 1px solid var(--danger); color: var(--danger); 
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; transition: 0.2s;
+        }
         .btn-clear:hover { background: var(--danger); color: white; }
-        .history-list { display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto; padding-right: 5px;}
+
+        .history-list { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 8px;}
         .history-list::-webkit-scrollbar { width: 6px; }
-        .history-list::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 10px; }
-        .history-item { padding: 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--history-bg); cursor: pointer; transition: 0.2s; }
-        .history-item:hover { border-color: var(--primary); background: var(--history-hover); }
-        .history-item-top { display: flex; justify-content: space-between; font-weight: bold; color: var(--primary); font-size: 15px; margin-bottom: 8px;}
-        .history-item-date { font-size: 13px; color: var(--text); opacity: 0.6; font-weight: normal; }
-        .history-details { color: var(--text); opacity: 0.85; font-size: 14px; line-height: 1.5; }
-        .history-details strong { font-weight: 600; opacity: 1; }
-        .history-address { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 13px; white-space: pre-wrap;}
+        .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        .history-item { 
+            padding: 16px; border: 1px solid var(--border); border-radius: 10px; 
+            background: var(--history-bg); cursor: pointer; transition: all 0.2s ease; 
+        }
+        .history-item:hover { 
+            border-color: var(--primary); 
+            background: var(--history-hover); 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .history-item-top { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 10px;}
+        .history-item-date { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        
+        .history-details { color: var(--text); font-size: 14px; line-height: 1.6; }
+        .history-details strong { font-weight: 600; color: var(--text); }
+        .history-address { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 13px; white-space: pre-wrap; color: var(--text-muted);}
     </style>
 </head>
 <body data-theme="light">
@@ -61,51 +244,73 @@
 </div>
 
 <div class="form-container">
-    <h2>IBI Returns Logger</h2>
+    
+    <div class="brand-container">
+        <img src="Twitter Header Photo.png" alt="India Business International" class="brand-logo" onerror="this.style.display='none'">
+        <h2>IBI Returns Logger</h2>
+    </div>
+
     <form id="return-form">
+        
         <div class="form-group">
             <label for="platform">Platform</label>
             <select id="platform" name="platform" required>
                 <option value="" disabled selected>Select Platform...</option>
-                <option>Amazon</option> <option>Amazon Bazaar</option>
-                <option>Flipkart</option> <option>Shopsy</option>
-                <option>Meesho</option> <option>ShopClues</option> <option>IBI Website</option>
+                <option>Amazon</option> 
+                <option>Amazon Bazaar</option>
+                <option>Flipkart</option> 
+                <option>Shopsy</option>
+                <option>Meesho</option> 
+                <option>ShopClues</option> 
+                <option>IBI Website</option>
             </select>
         </div>
+
         <div class="form-group">
             <label for="courier">Courier Name</label>
             <select id="courier" name="courier" required>
                 <option value="" disabled selected>Select Courier...</option>
-                <option>Amazon ATS</option> <option>eKart</option> <option>Delhivery</option>
+                <option>Amazon ATS</option> 
+                <option>eKart</option> 
+                <option>Delhivery</option>
             </select>
         </div>
+
         <div class="form-group">
             <label for="dateTime">System Entry Time (Auto-Locked)</label>
             <input type="datetime-local" id="dateTime" name="dateTime" class="locked-field" readonly required>
         </div>
+
         <div class="form-group">
             <label for="returnDate">Date of Return (Manual Selection)</label>
             <input type="date" id="returnDate" name="returnDate" required>
         </div>
+
         <div class="form-group">
             <label for="orderId">Order ID</label>
             <input type="text" id="orderId" name="orderId" placeholder="e.g. 404-1234567-8901234" required>
         </div>
+
         <div class="form-group">
             <label for="productName">Product Name</label>
             <input type="text" id="productName" name="productName" placeholder="Brief product description" required>
         </div>
+
         <div class="form-group">
             <label for="address">From Address</label>
             <textarea id="address" name="address" placeholder="Customer return address" required></textarea>
         </div>
+
         <div class="form-group">
             <label for="condition">Condition of Package</label>
             <select id="condition" name="condition" required>
                 <option value="" disabled selected>Select Condition...</option>
-                <option>Good</option> <option>Bad</option> <option>Slight Damage</option>
+                <option>Good</option> 
+                <option>Bad</option> 
+                <option>Slight Damage</option>
             </select>
         </div>
+
         <button type="submit" id="submit-btn" class="btn-submit">Submit Return Data</button>
         <div id="status-message" class="message"></div>
     </form>
@@ -115,14 +320,17 @@
             <h3>Memory (Tap to Reuse)</h3>
             <button class="btn-clear" onclick="clearHistory()" id="clearBtn" style="display: none;">🗑️ Clear All</button>
         </div>
-        <div id="history-list" class="history-list"></div>
+        <div id="history-list" class="history-list">
+            </div>
     </div>
 </div>
 
 <script>
+    // --- 1. Theme Toggle Logic ---
     function toggleTheme() {
         const body = document.body;
         const btn = document.getElementById('themeBtn');
+        
         if (body.getAttribute('data-theme') === 'dark') {
             body.setAttribute('data-theme', 'light');
             btn.innerText = '🌙 Dark Mode';
@@ -148,12 +356,14 @@
         renderHistory();
     });
 
+    // --- 2. System Time Logic ---
     function setCurrentDateTime() {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
         document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
     }
 
+    // --- 3. Local Memory Logic ---
     const HISTORY_KEY = 'ibi_returns_memory';
     const MAX_HISTORY = 24;
 
@@ -164,9 +374,10 @@
         
         if (history.length === 0) {
             clearBtn.style.display = 'none';
-            list.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 16px; font-size: 14px;">No recent packages logged on this device yet.</div>';
+            list.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px; font-size: 14px; font-weight: 500;">No recent packages logged on this device yet.</div>';
             return;
         }
+
         clearBtn.style.display = 'block';
         list.innerHTML = '';
         
@@ -174,6 +385,7 @@
             const div = document.createElement('div');
             div.className = 'history-item';
             div.onclick = () => loadFromHistory(index);
+            
             div.innerHTML = `
                 <div class="history-item-top">
                     <span>📦 ${item.orderId}</span>
@@ -204,6 +416,7 @@
         let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
         let item = history[index];
         if(!item) return;
+
         document.getElementById('platform').value = item.platform || '';
         document.getElementById('courier').value = item.courier || '';
         document.getElementById('returnDate').value = item.returnDate || '';
@@ -211,6 +424,7 @@
         document.getElementById('productName').value = item.productName || '';
         document.getElementById('address').value = item.address || '';
         document.getElementById('condition').value = item.condition || '';
+
         setCurrentDateTime();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -222,19 +436,21 @@
         }
     }
 
+    // --- 4. Database Submission Logic ---
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
+    
     const form = document.forms['return-form'];
     const submitBtn = document.getElementById('submit-btn');
     const statusMessage = document.getElementById('status-message');
 
     form.addEventListener('submit', e => {
         e.preventDefault();
+        
         submitBtn.disabled = true;
         submitBtn.innerText = 'SUBMITTING...';
         statusMessage.className = 'message';
         statusMessage.innerText = '';
 
-        // Notice: We completely removed the redundant submissionTimestamp append line here.
         const formData = new FormData(form);
 
         fetch(scriptURL, { method: 'POST', body: formData})
@@ -271,5 +487,6 @@
             });
     });
 </script>
+
 </body>
 </html>
