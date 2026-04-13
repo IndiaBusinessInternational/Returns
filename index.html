@@ -17,7 +17,9 @@
             --history-bg: #f8fafc;
             --history-hover: #eff6ff;
         }
-        [data-theme="dark"] {
+        
+        /* Forced Specificity for Dark Mode */
+        body[data-theme="dark"] {
             --primary: #3b82f6;
             --primary-hover: #60a5fa;
             --background: #0f172a;
@@ -39,7 +41,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* --- Theme Toggle Button --- */
@@ -61,6 +63,9 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             transition: 0.2s;
         }
+        .theme-toggle:hover {
+            border-color: var(--primary);
+        }
 
         .form-container {
             background-color: var(--surface);
@@ -69,7 +74,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 500px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
         h2 { margin-top: 0; text-align: center; font-size: 24px; }
         .form-group { margin-bottom: 16px; }
@@ -136,49 +141,3 @@
                 <option>Flipkart</option> <option>Shopsy</option>
                 <option>Meesho</option> <option>ShopClues</option> <option>IBI Website</option>
             </select>
-        </div>
-
-        <div class="form-group">
-            <label for="courier">Courier Name</label>
-            <select id="courier" name="courier" required>
-                <option value="" disabled selected>Select Courier...</option>
-                <option>Amazon ATS</option> <option>eKart</option> <option>Delhivery</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="dateTime">System Entry Time (Auto-Locked)</label>
-            <input type="datetime-local" id="dateTime" name="dateTime" class="locked-field" readonly required>
-        </div>
-
-        <div class="form-group">
-            <label for="returnDate">Date of Return (Manual Selection)</label>
-            <input type="date" id="returnDate" name="returnDate" required>
-        </div>
-
-        <div class="form-group">
-            <label for="orderId">Order ID</label>
-            <input type="text" id="orderId" name="orderId" placeholder="e.g. 404-1234567-8901234" required>
-        </div>
-
-        <div class="form-group">
-            <label for="productName">Product Name</label>
-            <input type="text" id="productName" name="productName" placeholder="Brief product description" required>
-        </div>
-
-        <div class="form-group">
-            <label for="address">From Address</label>
-            <textarea id="address" name="address" placeholder="Customer return address" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="condition">Condition of Package</label>
-            <select id="condition" name="condition" required>
-                <option value="" disabled selected>Select Condition...</option>
-                <option>Good</option> <option>Bad</option>
-            </select>
-        </div>
-
-        <button type="submit" id="submit-btn" class="btn-submit">Submit Return Data</button>
-        <div id="status-message" class="message"></div>
-    </form>
