@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warehouse Returns Logger</title>
+    <title>IBI Return Package Logger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2563eb;
@@ -16,9 +17,9 @@
             --locked-text: #5e6c84;
             --history-bg: #f8fafc;
             --history-hover: #eff6ff;
+            --danger: #ef4444;
         }
         
-        /* Forced Specificity for Dark Mode */
         body[data-theme="dark"] {
             --primary: #3b82f6;
             --primary-hover: #60a5fa;
@@ -30,97 +31,118 @@
             --locked-text: #94a3b8;
             --history-bg: #0f172a;
             --history-hover: #1e293b;
+            --danger: #f87171;
+        }
+
+        /* Apply Roboto and 11px size globally */
+        * {
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--background);
             color: var(--text);
             margin: 0;
-            padding: 50px 16px;
+            padding: 40px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 11px;
         }
 
-        /* --- Theme Toggle Button --- */
         .header-bar {
             width: 100%;
             max-width: 500px;
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
+        
         .theme-toggle {
             background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 11px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             transition: 0.2s;
         }
-        .theme-toggle:hover {
-            border-color: var(--primary);
-        }
+        .theme-toggle:hover { border-color: var(--primary); }
 
         .form-container {
             background-color: var(--surface);
-            padding: 24px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 500px;
             transition: background-color 0.3s ease;
         }
-        h2 { margin-top: 0; text-align: center; font-size: 24px; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; opacity: 0.9;}
+        
+        /* Title gets a slightly larger weight to stand out, but keeps the compact feel */
+        h2 { margin-top: 0; text-align: center; font-size: 16px; margin-bottom: 16px; }
+        
+        .form-group { margin-bottom: 12px; }
+        
+        label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 11px; opacity: 0.9;}
         
         input, select, textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border);
-            border-radius: 4px; box-sizing: border-box; font-size: 16px; font-family: inherit;
+            width: 100%; padding: 8px 10px; border: 1px solid var(--border);
+            border-radius: 4px; font-size: 11px; 
             background-color: var(--surface); color: var(--text); transition: 0.3s;
         }
-        input:focus, select:focus, textarea:focus {
-            outline: none; border-color: var(--primary);
-        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
 
         .locked-field {
             background-color: var(--locked-bg); color: var(--locked-text); cursor: not-allowed; border: 1px solid var(--border);
         }
-        textarea { resize: vertical; height: 80px; }
+        textarea { resize: vertical; height: 60px; }
         
         button.btn-submit {
-            width: 100%; padding: 14px; background-color: var(--primary); color: white;
-            border: none; border-radius: 4px; font-size: 16px; font-weight: bold;
-            cursor: pointer; transition: background-color 0.2s;
+            width: 100%; padding: 12px; background-color: var(--primary); color: white;
+            border: none; border-radius: 4px; font-size: 11px; font-weight: bold;
+            cursor: pointer; transition: background-color 0.2s; text-transform: uppercase;
         }
         button.btn-submit:hover { background-color: var(--primary-hover); }
         button.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        .message { margin-top: 16px; padding: 12px; border-radius: 4px; text-align: center; display: none; font-weight: bold; }
+        .message { margin-top: 12px; padding: 10px; border-radius: 4px; text-align: center; display: none; font-weight: bold; font-size: 11px;}
         .success { background-color: #e3fcef; color: #006644; display: block; }
         .error { background-color: #ffebe6; color: #bf2600; display: block; }
 
-        /* --- Local History Memory Panel --- */
-        .history-section { margin-top: 30px; border-top: 2px solid var(--border); padding-top: 16px; }
-        .history-section h3 { font-size: 13px; margin-bottom: 12px; color: var(--text); opacity: 0.7; text-transform: uppercase; text-align: center; letter-spacing: 0.5px;}
-        .history-list { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 5px;}
+        /* --- Expanded Local History Memory Panel --- */
+        .history-section { margin-top: 24px; border-top: 2px solid var(--border); padding-top: 16px; }
         
-        .history-list::-webkit-scrollbar { width: 6px; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .history-header h3 { font-size: 11px; color: var(--text); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; font-weight: 700;}
+        
+        .btn-clear { 
+            background: transparent; border: 1px solid var(--danger); color: var(--danger); 
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.2s;
+        }
+        .btn-clear:hover { background: var(--danger); color: white; }
+
+        .history-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 5px;}
+        .history-list::-webkit-scrollbar { width: 4px; }
         .history-list::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 10px; }
 
         .history-item { 
-            padding: 12px; border: 1px solid var(--border); border-radius: 6px; 
+            padding: 10px; border: 1px solid var(--border); border-radius: 6px; 
             background: var(--history-bg); cursor: pointer; transition: 0.2s; 
         }
         .history-item:hover { border-color: var(--primary); background: var(--history-hover); }
-        .history-item-top { display: flex; justify-content: space-between; font-weight: bold; color: var(--primary); font-size: 14px;}
-        .history-item-bottom { color: var(--text); opacity: 0.8; margin-top: 4px; font-size: 12px;}
+        
+        .history-item-top { display: flex; justify-content: space-between; font-weight: bold; color: var(--primary); font-size: 11px; margin-bottom: 6px;}
+        .history-item-date { font-size: 11px; color: var(--text); opacity: 0.6; font-weight: normal; }
+        
+        .history-details { color: var(--text); opacity: 0.85; font-size: 11px; line-height: 1.4; }
+        .history-details strong { font-weight: 600; opacity: 1; }
+        .history-address { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 11px; white-space: pre-wrap;}
     </style>
 </head>
 <body data-theme="light">
@@ -130,7 +152,7 @@
 </div>
 
 <div class="form-container">
-    <h2>Return Package Log</h2>
+    <h2>IBI Return Package Logger</h2>
     <form id="return-form">
         
         <div class="form-group">
@@ -189,14 +211,17 @@
     </form>
 
     <div class="history-section">
-        <h3>Memory: Last 24 Entries (Tap to Reuse)</h3>
+        <div class="history-header">
+            <h3>Memory (Tap to Reuse)</h3>
+            <button class="btn-clear" onclick="clearHistory()" id="clearBtn" style="display: none;">🗑️ Clear All</button>
+        </div>
         <div id="history-list" class="history-list">
             </div>
     </div>
 </div>
 
 <script>
-    // --- 1. Bulletproof Theme Toggle Logic ---
+    // --- 1. Theme Toggle Logic ---
     function toggleTheme() {
         const body = document.body;
         const btn = document.getElementById('themeBtn');
@@ -212,7 +237,6 @@
         }
     }
 
-    // This ensures the theme is checked safely ONLY after the page is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
         try {
             const savedTheme = localStorage.getItem('ibi_returns_theme');
@@ -220,11 +244,8 @@
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('themeBtn').innerText = '☀️ Light Mode';
             }
-        } catch (e) {
-            console.error("Local storage disabled or blocked", e);
-        }
+        } catch (e) { console.error("Local storage disabled", e); }
         
-        // Initialize history and dates here to guarantee safe execution
         setCurrentDateTime();
         document.getElementById('returnDate').valueAsDate = new Date();
         renderHistory();
@@ -243,25 +264,35 @@
 
     function renderHistory() {
         const list = document.getElementById('history-list');
+        const clearBtn = document.getElementById('clearBtn');
         let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
         
         if (history.length === 0) {
-            list.innerHTML = '<div style="font-size: 13px; color: var(--text-muted); text-align: center; padding: 10px;">No recent packages logged on this device yet.</div>';
+            clearBtn.style.display = 'none';
+            list.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 10px;">No recent packages logged on this device yet.</div>';
             return;
         }
 
+        clearBtn.style.display = 'block';
         list.innerHTML = '';
+        
         history.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'history-item';
             div.onclick = () => loadFromHistory(index);
+            
             div.innerHTML = `
                 <div class="history-item-top">
                     <span>📦 ${item.orderId}</span>
-                    <span>${item.platform}</span>
+                    <span class="history-item-date">🗓️ ${item.returnDate}</span>
                 </div>
-                <div class="history-item-bottom">
-                    ${item.courier} • ${item.productName} 
+                <div class="history-details">
+                    <strong>Platform:</strong> ${item.platform} &nbsp;|&nbsp; <strong>Courier:</strong> ${item.courier}<br>
+                    <strong>Product:</strong> ${item.productName}<br>
+                    <strong>Condition:</strong> ${item.condition}
+                </div>
+                <div class="history-address">
+                    <strong>From:</strong> ${item.address}
                 </div>
             `;
             list.appendChild(div);
@@ -293,6 +324,13 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function clearHistory() {
+        if(confirm("Are you sure you want to clear all 24 saved entries? This cannot be undone.")) {
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistory();
+        }
+    }
+
     // --- 4. Database Submission Logic ---
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
     
@@ -304,7 +342,7 @@
         e.preventDefault();
         
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Submitting...';
+        submitBtn.innerText = 'SUBMITTING...';
         statusMessage.className = 'message';
         statusMessage.innerText = '';
 
@@ -314,7 +352,7 @@
         fetch(scriptURL, { method: 'POST', body: formData})
             .then(response => response.json())
             .then(data => {
-                statusMessage.innerText = 'Success! Package logged.';
+                statusMessage.innerText = 'SUCCESS! PACKAGE LOGGED.';
                 statusMessage.className = 'message success';
                 
                 const currentData = {
@@ -329,7 +367,7 @@
                 saveToHistory(currentData);
 
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Submit Return Data';
+                submitBtn.innerText = 'SUBMIT RETURN DATA';
                 form.reset();
                 setCurrentDateTime();
                 document.getElementById('returnDate').valueAsDate = new Date(); 
@@ -338,10 +376,10 @@
             })
             .catch(error => {
                 console.error('Error!', error);
-                statusMessage.innerText = 'Error saving data. Please try again.';
+                statusMessage.innerText = 'ERROR SAVING DATA. PLEASE TRY AGAIN.';
                 statusMessage.className = 'message error';
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Submit Return Data';
+                submitBtn.innerText = 'SUBMIT RETURN DATA';
             });
     });
 </script>
