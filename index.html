@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IBI Returns Logger</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23000000'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' fill='%2300c5ff' font-family='Roboto, Arial, sans-serif' font-size='38' font-weight='900'>IBI</text></svg>">
-    
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -353,7 +352,12 @@
             }
         } catch (e) { console.error("Local storage disabled", e); }
         
+        // Update the time immediately on load
         setCurrentDateTime();
+        
+        // UPDATE FIX: Keep the clock ticking live every 1 second in the background
+        setInterval(setCurrentDateTime, 1000);
+        
         document.getElementById('returnDate').valueAsDate = new Date();
         renderHistory();
     });
@@ -362,6 +366,7 @@
     function setCurrentDateTime() {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        // This live-updates the locked HTML field
         document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
     }
 
@@ -427,6 +432,7 @@
         document.getElementById('address').value = item.address || '';
         document.getElementById('condition').value = item.condition || '';
 
+        // Update time when loading from memory too
         setCurrentDateTime();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -447,6 +453,9 @@
 
     form.addEventListener('submit', e => {
         e.preventDefault();
+        
+        // UPDATE FIX: Force an exact time grab the millisecond before it builds the data to send
+        setCurrentDateTime(); 
         
         submitBtn.disabled = true;
         submitBtn.innerText = 'SUBMITTING...';
