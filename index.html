@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>IBI Returns Logger</title>
+
+    <!-- Inline SVG favicon: "IBI" in #00c5ff on black, bold Roboto-style -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23000'/><text x='50' y='52' font-family='Roboto, Arial, sans-serif' font-weight='900' font-size='44' fill='%2300c5ff' text-anchor='middle' dominant-baseline='central' letter-spacing='-1.5'>IBI</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23000'/><text x='50' y='52' font-family='Roboto, Arial, sans-serif' font-weight='900' font-size='44' fill='%2300c5ff' text-anchor='middle' dominant-baseline='central' letter-spacing='-1.5'>IBI</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===================================================
+           IBI BRAND DESIGN TOKENS
+           =================================================== */
+        :root {
+            /* Brand */
+            --ibi-cyan:        #00c5ff;
+            --ibi-cyan-hover:  #33d4ff;
+            --ibi-cyan-soft:   rgba(0, 197, 255, 0.12);
+            --ibi-cyan-ring:   rgba(0, 197, 255, 0.30);
+            --ibi-black:       #000000;
+            --ibi-black-soft:  #0a0a0a;
+
+            /* Light mode surfaces */
+            --bg:              #f4f6fa;
+            --surface:         #ffffff;
+            --text:            #0d1117;
+            --text-muted:      #5b6470;
+            --border:          #e2e6ec;
+            --input-bg:        #fafbfc;
+            --history-bg:      #f6f8fb;
+            --history-hover:   #eef2f7;
+            --danger:          #ef4444;
+            --success-bg:      #dcfce7;
+            --success-border:  #bbf7d0;
+            --success-text:    #166534;
+            --error-bg:        #fee2e2;
+            --error-border:    #fecaca;
+            --error-text:      #991b1b;
+            --shadow-card:     0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-popover:  0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        body[data-theme="dark"] {
+            --bg:              #0a0e14;
+            --surface:         #131a23;
+            --text:            #f0f3f6;
+            --text-muted:      #8b95a3;
+            --border:          #1f2731;
+            --input-bg:        #0e141b;
+            --history-bg:      #0e141b;
+            --history-hover:   #1a2129;
+            --danger:          #f87171;
+            --success-bg:      rgba(34, 197, 94, 0.15);
+            --success-border:  rgba(34, 197, 94, 0.4);
+            --success-text:    #4ade80;
+            --error-bg:        rgba(239, 68, 68, 0.15);
+            --error-border:    rgba(239, 68, 68, 0.4);
+            --error-text:      #fca5a5;
+            --shadow-card:     0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0,0,0,0.4);
+            --shadow-popover:  0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ===================================================
+           BASE
+           =================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            line-height: 1.5;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ===================================================
+           HERO BANNER (Black with logo + theme switch)
+           =================================================== */
+        .hero {
+            position: relative;
+            background-color: var(--ibi-black);
+            padding: 28px 16px 36px;
+            border-bottom: 2px solid var(--ibi-cyan);
+        }
+        .hero-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .hero-logo {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            display: block;
+            user-select: none;
+        }
+        .hero-tagline {
+            color: var(--ibi-cyan);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        /* Theme switch positioned in hero top-right */
+        .theme-switch-wrap {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Version badge positioned in hero top-left (mirrors theme switch) */
+        .version-top {
+            position: absolute;
+            top: 18px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 11px;
+            background-color: transparent;
+            color: var(--ibi-cyan);
+            border: 1px solid var(--ibi-cyan);
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            font-family: 'Roboto', sans-serif;
+            user-select: none;
+            cursor: default;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .version-top:hover {
+            background-color: var(--ibi-cyan);
+            color: var(--ibi-black);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 197, 255, 0.45);
+        }
+        .version-top .version-dot {
+            width: 5px;
+            height: 5px;
+            background-color: var(--ibi-cyan);
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+        .version-top:hover .version-dot {
+            background-color: var(--ibi-black);
+        }
+        .theme-label-text {
+            color: rgba(255,255,255,0.55);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            user-select: none;
+        }
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+        .theme-switch .slider {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 28px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .theme-switch .slider::before {
+            content: '☀';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background-color: var(--ibi-cyan);
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), content 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: var(--ibi-black);
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 197, 255, 0.4);
+        }
+        .theme-switch input:checked + .slider::before {
+            transform: translateX(24px);
+            content: '☾';
+        }
+        .theme-switch input:focus-visible + .slider {
+            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
+        }
+
+        /* ===================================================
+           MAIN CONTAINER
+           =================================================== */
+        .page-wrap {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 24px 16px 48px;
+        }
+        .card {
+            background-color: var(--surface);
+            border-radius: 14px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* ===================================================
+           SECTION HEADER STRIPS
+           Cyan text on black background — IBI signature
+           =================================================== */
+        .section-header {
+            background-color: var(--ibi-black);
+            color: var(--ibi-cyan);
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid var(--ibi-cyan);
+        }
+        .section-header h2,
+        .section-header h3 {
+            margin: 0;
+            color: var(--ibi-cyan);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            flex: 1;
+        }
+        .section-header .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            color: var(--ibi-cyan);
+            flex-shrink: 0;
+        }
+        .section-header .section-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .section-body {
+            padding: 24px 22px;
+        }
+
+        /* ===================================================
+           FORM CONTROLS
+           =================================================== */
+        .form-group { margin-bottom: 18px; }
+        .form-group:last-of-type { margin-bottom: 0; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+        /* Badge shown on the Courier label when auto-set by platform */
+        .auto-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 7px;
+            background-color: var(--ibi-cyan);
+            color: var(--ibi-black);
+            font-size: 8px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-family: 'Roboto', sans-serif;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+        /* Courier select when auto-locked */
+        select.auto-locked {
+            border-color: var(--ibi-cyan);
+            background-color: var(--ibi-cyan-soft);
+            color: var(--text);
+            cursor: default;
+        }
+        select.auto-locked:focus {
+            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="datetime-local"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: var(--input-bg);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6470' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        body[data-theme="dark"] select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a3' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--ibi-cyan);
+            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
+            background-color: var(--surface);
+        }
+
+        .locked-field {
+            background-color: var(--history-bg) !important;
+            color: var(--text-muted);
+            cursor: not-allowed;
+            font-weight: 500;
+        }
+        .locked-field:focus {
+            box-shadow: none;
+            border-color: var(--border);
+            background-color: var(--history-bg) !important;
+        }
+
+        textarea { resize: vertical; height: 88px; }
+
+        /* ===================================================
+           SUBMIT BUTTON — Cyan with black text
+           =================================================== */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--ibi-cyan);
+            color: var(--ibi-black);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 197, 255, 0.25);
+        }
+        .btn-submit:hover:not(:disabled) {
+            background-color: var(--ibi-cyan-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 197, 255, 0.4);
+        }
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 197, 255, 0.3);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* ===================================================
+           STATUS MESSAGES
+           =================================================== */
+        .message {
+            margin-top: 18px;
+            padding: 13px 16px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        .success {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+            display: block;
+        }
+        .error {
+            background-color: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid var(--error-border);
+            display: block;
+        }
+
+        /* ===================================================
+           MEMORY / HISTORY SECTION
+           =================================================== */
+        .memory-card {
+            margin-top: 20px;
+        }
+        .section-header .btn-clear {
+            background: transparent;
+            border: 1.5px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 5px 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        .section-header .btn-clear:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white;
+        }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 460px;
+            overflow-y: auto;
+        }
+        .history-list::-webkit-scrollbar { width: 6px; }
+        .history-list::-webkit-scrollbar-track { background: transparent; }
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+        .history-list::-webkit-scrollbar-thumb:hover {
+            background: var(--ibi-cyan);
+        }
+
+        .history-item {
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: var(--history-bg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .history-item:hover {
+            border-color: var(--ibi-cyan);
+            background: var(--history-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 197, 255, 0.15);
+        }
+        .history-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--ibi-cyan);
+            font-size: 14px;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .history-item-top .order-id {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .history-item-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .history-details {
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .history-details strong {
+            font-weight: 700;
+            color: var(--text);
+        }
+        .history-address {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+            font-size: 12px;
+            white-space: pre-wrap;
+            color: var(--text-muted);
+        }
+        .history-empty {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 28px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--history-bg);
+            border: 1.5px dashed var(--border);
+            border-radius: 10px;
+        }
+
+        /* ===================================================
+           SEARCHABLE PRODUCT SELECTOR
+           =================================================== */
+        .product-selector { position: relative; }
+
+        .product-trigger {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text);
+            font-size: 15px;
+            font-family: 'Roboto', sans-serif;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+        }
+        .product-trigger:hover { border-color: var(--ibi-cyan); }
+        .product-selector.open .product-trigger,
+        .product-trigger:focus {
+            outline: none;
+            border-color: var(--ibi-cyan);
+            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
+            background-color: var(--surface);
+        }
+        .product-trigger-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .product-trigger-label.placeholder { color: var(--text-muted); }
+        .product-trigger .chevron {
+            color: var(--text-muted);
+            font-size: 12px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+        .product-selector.open .chevron {
+            transform: rotate(180deg);
+            color: var(--ibi-cyan);
+        }
+
+        .product-dropdown {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            border: 1.5px solid var(--ibi-cyan);
+            border-radius: 10px;
+            box-shadow: var(--shadow-popover);
+            z-index: 50;
+            overflow: hidden;
+        }
+        .product-search-wrap {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--input-bg);
+        }
+        .product-search {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: 14px;
+            background-color: var(--surface);
+            color: var(--text);
+        }
+        .product-search:focus {
+            outline: none;
+            border-color: var(--ibi-cyan);
+            box-shadow: 0 0 0 2px var(--ibi-cyan-ring);
+        }
+
+        .product-options {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .product-options::-webkit-scrollbar { width: 6px; }
+        .product-options::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .product-options::-webkit-scrollbar-thumb:hover { background: var(--ibi-cyan); }
+
+        .product-option {
+            padding: 11px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.12s ease, color 0.12s ease;
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+        }
+        .product-option:last-child { border-bottom: none; }
+        .product-option:hover {
+            background-color: var(--ibi-cyan-soft);
+            color: var(--ibi-cyan);
+        }
+        .product-option .opt-index {
+            display: inline-block;
+            min-width: 32px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .product-option .opt-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .product-option.other-option {
+            background-color: var(--ibi-black);
+            color: var(--ibi-cyan);
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            border-bottom: 2px solid var(--ibi-cyan);
+            letter-spacing: 0.5px;
+        }
+        .product-option.other-option:hover {
+            background-color: var(--ibi-cyan);
+            color: var(--ibi-black);
+        }
+
+        .product-no-results {
+            padding: 24px 14px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .product-custom-input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1.5px solid var(--ibi-cyan);
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: var(--surface);
+            color: var(--text);
+            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
+        }
+        .product-custom-input:focus { outline: none; }
+
+        .product-custom-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        .product-back-btn {
+            background: transparent;
+            border: 1.5px dashed var(--border);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            transition: all 0.2s ease;
+        }
+        .product-back-btn:hover {
+            border-color: var(--ibi-cyan);
+            border-style: solid;
+            color: var(--ibi-cyan);
+        }
+
+        /* ===================================================
+           FOOTER CREDIT
+           =================================================== */
+        .app-footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+        .footer-credit {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ===================================================
+           MOBILE RESPONSIVE
+           =================================================== */
+        @media (max-width: 480px) {
+            .hero { padding: 22px 14px 28px; }
+            .hero-logo { max-width: 100%; }
+            .theme-switch-wrap { top: 12px; right: 12px; gap: 6px; }
+            .theme-label-text { display: none; }
+            .version-top {
+                top: 14px;
+                left: 12px;
+                padding: 4px 9px;
+                font-size: 9px;
+                letter-spacing: 1.4px;
+            }
+            .version-top .version-dot { width: 4px; height: 4px; }
+            .page-wrap { padding: 18px 12px 36px; }
+            .section-header { padding: 12px 16px; }
+            .section-header h2,
+            .section-header h3 { font-size: 14px; letter-spacing: 1.5px; }
+            .section-body { padding: 20px 16px; }
+            .form-group { margin-bottom: 16px; }
+            input[type="text"],
+            input[type="date"],
+            input[type="datetime-local"],
+            select,
+            textarea,
+            .product-trigger {
+                font-size: 16px; /* iOS: prevent zoom on focus */
+            }
+        }
+
+        @media (max-width: 360px) {
+            .theme-switch { width: 46px; height: 26px; }
+            .theme-switch .slider::before { width: 20px; height: 20px; font-size: 11px; }
+            .theme-switch input:checked + .slider::before { transform: translateX(20px); }
+            .version-top { letter-spacing: 1.2px; }
+            .section-header h2,
+            .section-header h3 { font-size: 13px; letter-spacing: 1px; }
+        }
+
+        /* Reduce motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- ===================================================
+         HERO BANNER — Black with IBI logo + theme switch + version
+         =================================================== -->
+    <header class="hero">
+        <div class="version-top" id="versionTop" title="App Version">
+            <span class="version-dot"></span>
+            <span id="versionTopText">v3.2</span>
+        </div>
+        <div class="theme-switch-wrap">
+            <span class="theme-label-text" id="themeLabel">Light</span>
+            <label class="theme-switch" for="themeToggle" aria-label="Toggle dark mode">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="hero-inner">
+            <img src="logo.png" alt="India Business International — eCommerce for the World" class="hero-logo" onerror="this.style.display='none'">
+            <div class="hero-tagline">Returns Logger</div>
+        </div>
+    </header>
+
+    <!-- ===================================================
+         MAIN CONTENT
+         =================================================== -->
+    <main class="page-wrap">
+
+        <!-- Return Details Card -->
+        <section class="card" aria-labelledby="returnDetailsTitle">
+            <div class="section-header">
+                <span class="section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                </span>
+                <h2 id="returnDetailsTitle">Return Details</h2>
+            </div>
+
+            <div class="section-body">
+                <form id="return-form" novalidate>
+
+                    <div class="form-group">
+                        <label for="platform">Platform</label>
+                        <select id="platform" name="platform" required>
+                            <option value="" disabled selected>Select Platform...</option>
+                            <option>Amazon</option>
+                            <option>Amazon Bazaar</option>
+                            <option>Flipkart</option>
+                            <option>Shopsy</option>
+                            <option>Meesho</option>
+                            <option>ShopClues</option>
+                            <option>IBI Website</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courier">Courier Name</label>
+                        <select id="courier" name="courier" required>
+                            <option value="" disabled selected>Select Courier...</option>
+                            <option>Amazon ATS</option>
+                            <option>eKart</option>
+                            <option>Delhivery</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateTime">System Entry Time (Auto-Locked)</label>
+                        <input type="datetime-local" id="dateTime" name="dateTime" class="locked-field" readonly required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="returnDate">Date of Return</label>
+                        <input type="date" id="returnDate" name="returnDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderId">Order ID</label>
+                        <input type="text" id="orderId" name="orderId" placeholder="e.g. 404-1234567-8901234" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productSelectBtn">Product Name</label>
+                        <div class="product-selector" id="productSelector">
+                            <button type="button" id="productSelectBtn" class="product-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                <span id="productSelectLabel" class="product-trigger-label placeholder">Select Product...</span>
+                                <span class="chevron" aria-hidden="true">▾</span>
+                            </button>
+
+                            <div id="productDropdown" class="product-dropdown" hidden>
+                                <div class="product-search-wrap">
+                                    <input type="text" id="productSearch" class="product-search" placeholder="🔍 Search products..." autocomplete="off">
+                                </div>
+                                <div id="productOptions" class="product-options" role="listbox"></div>
+                            </div>
+
+                            <div id="productCustomWrap" hidden>
+                                <input type="text" id="productCustom" class="product-custom-input" placeholder="Type product name" autocomplete="off">
+                                <div class="product-custom-hint">Manual entry — product not in standard catalogue.</div>
+                                <button type="button" id="productBackBtn" class="product-back-btn">↩ Back to Product List</button>
+                            </div>
+
+                            <input type="hidden" id="productName" name="productName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">From Address</label>
+                        <textarea id="address" name="address" placeholder="Customer return address" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="condition">Condition of Package</label>
+                        <select id="condition" name="condition" required>
+                            <option value="" disabled selected>Select Condition...</option>
+                            <option>Good</option>
+                            <option>Bad</option>
+                            <option>Slight Damage</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-submit">Submit Return Data</button>
+                    <div id="status-message" class="message" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Memory Card -->
+        <section class="card memory-card" aria-labelledby="memoryTitle">
+            <div class="section-header">
+                <span class="section-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </span>
+                <h3 id="memoryTitle">Memory · Tap to Reuse</h3>
+                <button class="btn-clear" onclick="clearHistory()" id="clearBtn" style="display: none;">Clear All</button>
+            </div>
+            <div class="section-body">
+                <div id="history-list" class="history-list"></div>
+            </div>
+        </section>
+
+        <!-- Footer Credit -->
+        <div class="app-footer">
+            <div class="footer-credit">© India Business International</div>
+        </div>
+    </main>
+
+<script>
+    // =====================================================
+    //  IBI RETURNS LOGGER — VERSION TRACKING
+    // -----------------------------------------------------
+    //  To release a new version, update APP_VERSION below:
+    //
+    //    • SMALL PATCH (bug fix, tweak, UI polish, copy change):
+    //        bump the MINOR number after the dot.
+    //        e.g.  '3'  →  '3.1'  →  '3.2'  →  '3.3' …
+    //
+    //    • BIG FEATURE (new functionality, major rework):
+    //        bump the MAJOR number and drop the minor.
+    //        e.g.  '3.4'  →  '4'  →  '4.1'  →  '4.2' …
+    //
+    //  The badge in the footer updates automatically from APP_VERSION.
+    //  Add a one-line entry to the changelog for every release.
+    //
+    //  Changelog:
+    //    v3.2 (2026-05-29) — Platform → Courier auto-lock. Selecting a
+    //                        platform auto-sets the correct courier and
+    //                        dims the non-applicable options:
+    //                        Amazon / Amazon Bazaar → Amazon ATS
+    //                        Flipkart / Shopsy → eKart
+    //                        Meesho / ShopClues / IBI Website → Delhivery
+    //                        Courier label shows ⚡ AUTO badge and cyan
+    //                        border when locked. Resets on form clear.
+    //    v3.1 (2026-05-25) — Moved version badge to hero banner top-left.
+    //    v3   (2026-05-25) — Full UI rebuild on IBI brand identity.
+    //                        Cyan (#00c5ff) on black section headers,
+    //                        prominent logo banner with cyan underline,
+    //                        proper toggle-switch theme control with
+    //                        sun/moon glyphs, inline SVG "IBI" favicon,
+    //                        Roboto throughout, mobile-first responsive
+    //                        layout (480px / 360px breakpoints, iOS
+    //                        zoom-on-focus prevention, reduced-motion
+    //                        support). Refined product selector and
+    //                        memory cards with cyan accent system.
+    //    v2.1 (2026-05-25) — Adopted minor versioning scheme (vX.Y format)
+    //                        with in-file documentation of the convention.
+    //    v2   (2026-05-25) — Added IBI master product list (102 items) with
+    //                        searchable dropdown + custom-text "Other" option.
+    //                        Manual validation for hidden field.
+    //    v1   (initial)    — Baseline: Returns Logger with platform / courier /
+    //                        order / product / address / condition fields,
+    //                        Google Apps Script backend, 24-entry local memory,
+    //                        light/dark theme toggle.
+    // =====================================================
+    const APP_VERSION = '3.2';
+
+    // --- 0. IBI Master Product List (synced from Google Sheets) ---
+    const PRODUCT_LIST = [
+        "Tamarind Seed Remover 2 Qty Pack",
+        "Tamarind Seed Remover 4 Qty Pack",
+        "Chappal Stitching Tool | Cobbler Awl 1 Qty",
+        "Chappal Stitching Tool | Cobbler Awl 2 Qty",
+        "Sack Needle Big 2 Qty Pack",
+        "Sack Needle Big 4 Qty Pack",
+        "Sack Needle Big 6 Qty Pack",
+        "Coconut Broom Stick 1 Qty",
+        "Coconut Broom Sticks 2 Qty Pack",
+        "Coconut Broom Sticks 4 Qty Pack",
+        "Coconut Broom Sticks 6 Qty Pack",
+        "Coconut Broom Sticks 10 Qty Pack",
+        "Coir Brush 1 Qty",
+        "Coir Brush 2 Qty Pack",
+        "Coir Brush 4 Qty Pack",
+        "Coir Brush 6 Qty Pack",
+        "Coir Brush 10 Qty Pack",
+        "Palmyrah Brush 1 Qty",
+        "Palmyrah Brush 2 Qty Pack",
+        "Palmyrah Brush 4 Qty Pack",
+        "Palmyrah Brush 6 Qty Pack",
+        "Floor Brush Palmyrah 30x10.5x7 cm 1 Qty",
+        "Floor Brush Palmyrah 45x10.5x7 cm 1 Qty",
+        "Therali Leaves 50 Qty Pack",
+        "Therali Leaves 100 Qty Pack",
+        "Banana Leaves Round-Cut 9 Inch 10 Qty Pack",
+        "Banana Leaves Round-Cut 9 Inch 20 Qty Pack",
+        "Biriyani Leaves | Rambai Leaves 10 Qty Pack",
+        "Biriyani Leaves | Rambai Leaves 20 Qty Pack",
+        "JackFruit Leaves 50 Qty Pack",
+        "JackFruit Leaves 100 Qty Pack",
+        "Tapioca Cassava Stem Cuttings 4 Qty Pack",
+        "Tapioca Cassava Stem Cuttings 8 Qty Pack",
+        "Matti Banana Live Plant GI Kanyakumari Tag 1 Qty",
+        "Nendran Banana Live Plant 1 Qty",
+        "Red Banana Live Plant 1 Qty",
+        "Rasakathali Banana Live Plant 1 Qty",
+        "Palayamkottai Banana Live Plant 1 Qty",
+        "Stone Diyas Big 1 Qty",
+        "Stone Diyas Big 2 Qty Pack",
+        "Stone Diyas Drops Model 1 Qty",
+        "Stone Diyas Round Model 1 Qty",
+        "Aluminium Bucket BIS 7.5 Litre 1 Qty",
+        "Aluminium Bucket BIS 7.5 Litre 2 Qty Pack",
+        "Aluminium Bucket BIS 11.5 Litre 1 Qty",
+        "Aluminium Bucket BIS 11.5 Litre 2 Qty Pack",
+        "Aluminium Uruli with Lid BIS 17 No Size 1 Qty",
+        "Aluminium Food Strainer BIS 1 Qty",
+        "Aluminium Food Strainer BIS 2 Qty Pack",
+        "Aluminium Puttu Maker 1 Qty",
+        "Aluminium Dust Pan 1 Qty",
+        "Aluminium Dust Pan 2 Qty Pack",
+        "Aluminium Achu Murukku Mould 1 Qty",
+        "Aluminium Achu Murukku Mould 2 Qty Pack",
+        "Stainless Steel Thooku Vaali, 1 Qty",
+        "Invisible Chain Single Layer 1 Qty",
+        "Invisible Chain Single Layer 2 Qty Pack",
+        "Invisible Chain Double Layers 1 Qty",
+        "Invisible Chain Double Layers 2 Qty Pack",
+        "Invisible Chain 3 Layers 1 Qty",
+        "Invisible Chain 3 Layers 2 Qty Pack",
+        "Hydro Crystal Beads Chain 1 Qty",
+        "Hydro Crystal Beads Chain 2 Qty Pack",
+        "Round Grow Bag 1 Qty",
+        "Round Grow Bag 2 Qty Pack",
+        "Rectangular Grow Bag 1 Qty",
+        "Rectangular Grow Bag 2 Qty Pack",
+        "Clay Sambrani Holder Big 1 Qty",
+        "Clay Round Curry Pot with Lid and Handle 1 Qty",
+        "Clay Round Curry Pot with Lid and No Handle 1 Qty",
+        "Clay Pongal Pot with Lid 1 Qty",
+        "Clay Pongal Pot with Lid 2 Qty Pack",
+        "Clay Appam Maker with Lid 1 Qty",
+        "Clay Dosai Maker with Lid 1 Qty",
+        "Clay Uruli with Lid 1 Qty",
+        "Coconut Shell Charcoal 500 Gram Pack",
+        "Coconut Shell Charcoal 1 Kg Pack",
+        "Coconut Shell Charcoal 2 Kg Pack",
+        "Coconut Shell Charcoal Powder 500 Gram Pack",
+        "Koram Pai 1 Qty",
+        "Koram Pai 2 Qty Pack",
+        "Koram Pai 3 Qty Pack",
+        "Palm Leaf Petti 1 Qty",
+        "Palm Leaf Petti 2 Qty Pack",
+        "Palm Leaf Petti 4 Qty Pack",
+        "Palm Leaf Petti 10 Qty Pack",
+        "Rat Trap Iron Spring Type 1 Qty",
+        "Rat Trap Iron Big Springless Type 1 Qty",
+        "Coir Mat 1 Qty",
+        "Coir Mat 2 Qty Pack",
+        "Cotton Men's Polo T-Shirt XL Size White Color",
+        "Cotton Men's Polo T-Shirt XL Size Black Color",
+        "Cotton Men's Polo T-Shirt XL Size Mustard Yellow Color",
+        "Polyster Men's Mars Polo T-Shirt M Size White Color",
+        "Polyster Men's Mars Polo T-Shirt L Size White Color",
+        "Polyster Men's Mars Polo T-Shirt XL Size White Color",
+        "Polyster Men's Mars Polo T-Shirt M Size Black Color",
+        "Polyster Men's Mars Polo T-Shirt L Size Black Color",
+        "Polyster Men's Mars Polo T-Shirt XL Size Black Color",
+        "Polyster Men's Mars Polo T-Shirt M Size Navy Blue Color",
+        "Polyster Men's Mars Polo T-Shirt L Size Navy Blue Color",
+        "Polyster Men's Mars Polo T-Shirt XL Size Navy Blue Color"
+    ];
+
+    // --- 1. Theme Switch (Toggle) ---
+    const themeToggle = document.getElementById('themeToggle');
+    const themeLabel  = document.getElementById('themeLabel');
+
+    function applyTheme(mode) {
+        document.body.setAttribute('data-theme', mode);
+        themeToggle.checked = (mode === 'dark');
+        themeLabel.textContent = (mode === 'dark') ? 'Dark' : 'Light';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+    }
+
+    themeToggle.addEventListener('change', () => {
+        const next = themeToggle.checked ? 'dark' : 'light';
+        applyTheme(next);
+        try { localStorage.setItem('ibi_returns_theme', next); } catch (e) {}
+    });
+
+    // --- 2. Page Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Version badge in the hero (top-left), from APP_VERSION constant
+        const vText = document.getElementById('versionTopText');
+        if (vText) vText.textContent = 'v' + APP_VERSION;
+
+        // Restore saved theme
+        try {
+            const saved = localStorage.getItem('ibi_returns_theme');
+            applyTheme(saved === 'dark' ? 'dark' : 'light');
+        } catch (e) { applyTheme('light'); }
+
+        setCurrentDateTime();
+        document.getElementById('returnDate').valueAsDate = new Date();
+        renderHistory();
+    });
+
+    // --- 3. System Time Logic ---
+    function setCurrentDateTime() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
+    }
+
+    // --- 3a. Platform → Courier Auto-Lock ---
+    const PLATFORM_COURIER_MAP = {
+        'Amazon':        'Amazon ATS',
+        'Amazon Bazaar': 'Amazon ATS',
+        'Flipkart':      'eKart',
+        'Shopsy':        'eKart',
+        'Meesho':        'Delhivery',
+        'ShopClues':     'Delhivery',
+        'IBI Website':   'Delhivery',
+    };
+
+    const courierSelect = document.getElementById('courier');
+    const courierLabel  = document.querySelector('label[for="courier"]');
+
+    function syncCourierToPlatform(platform) {
+        const allOptions = Array.from(courierSelect.options);
+
+        if (!platform) {
+            // No platform selected — reset all options to enabled
+            allOptions.forEach(opt => {
+                if (opt.value) { opt.disabled = false; opt.style.opacity = ''; }
+            });
+            courierSelect.value = '';
+            courierSelect.classList.remove('auto-locked');
+            courierLabel.innerHTML = 'Courier Name';
+            return;
+        }
+
+        const target = PLATFORM_COURIER_MAP[platform] || 'Delhivery';
+
+        // Auto-select the correct courier
+        courierSelect.value = target;
+
+        // Dim all non-matching options, enable the matching one
+        allOptions.forEach(opt => {
+            if (!opt.value) return; // skip the blank placeholder
+            if (opt.value === target) {
+                opt.disabled = false;
+                opt.style.opacity = '';
+            } else {
+                opt.disabled = true;
+                opt.style.opacity = '0.35';
+            }
+        });
+
+        // Update the label with the AUTO badge
+        courierLabel.innerHTML = 'Courier Name <span class="auto-badge">⚡ Auto</span>';
+        courierSelect.classList.add('auto-locked');
+    }
+
+    // Wire platform change to auto-sync courier
+    document.getElementById('platform').addEventListener('change', function () {
+        syncCourierToPlatform(this.value);
+    });
+
+    // --- 4. Local Memory Logic ---
+    const HISTORY_KEY = 'ibi_returns_memory';
+    const MAX_HISTORY = 24;
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('history-list');
+        const clearBtn = document.getElementById('clearBtn');
+        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+
+        if (history.length === 0) {
+            clearBtn.style.display = 'none';
+            list.innerHTML = '<div class="history-empty">No recent packages logged on this device yet.</div>';
+            return;
+        }
+
+        clearBtn.style.display = 'inline-flex';
+        list.innerHTML = '';
+
+        history.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.onclick = () => loadFromHistory(index);
+            div.innerHTML = `
+                <div class="history-item-top">
+                    <span class="order-id">📦 ${escapeHtml(item.orderId || '')}</span>
+                    <span class="history-item-date">🗓️ ${escapeHtml(item.returnDate || '')}</span>
+                </div>
+                <div class="history-details">
+                    <strong>Platform:</strong> ${escapeHtml(item.platform || '')} &nbsp;|&nbsp; <strong>Courier:</strong> ${escapeHtml(item.courier || '')}<br>
+                    <strong>Product:</strong> ${escapeHtml(item.productName || '')}<br>
+                    <strong>Condition:</strong> ${escapeHtml(item.condition || '')}
+                </div>
+                <div class="history-address">
+                    <strong>From:</strong> ${escapeHtml(item.address || '')}
+                </div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function saveToHistory(dataObj) {
+        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        history.unshift(dataObj);
+        if (history.length > MAX_HISTORY) history.pop();
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        renderHistory();
+    }
+
+    function loadFromHistory(index) {
+        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        const item = history[index];
+        if (!item) return;
+
+        document.getElementById('platform').value = item.platform || '';
+        syncCourierToPlatform(item.platform || '');   // auto-lock courier for this platform
+        document.getElementById('returnDate').value = item.returnDate || '';
+        document.getElementById('orderId').value = item.orderId || '';
+        setProductFromHistory(item.productName || '');
+        document.getElementById('address').value = item.address || '';
+        document.getElementById('condition').value = item.condition || '';
+
+        setCurrentDateTime();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearHistory() {
+        if (confirm("Are you sure you want to clear all saved entries? This cannot be undone.")) {
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistory();
+        }
+    }
+
+    // --- 5. Searchable Product Selector ---
+    const productSelector    = document.getElementById('productSelector');
+    const productSelectBtn   = document.getElementById('productSelectBtn');
+    const productSelectLabel = document.getElementById('productSelectLabel');
+    const productDropdown    = document.getElementById('productDropdown');
+    const productSearch      = document.getElementById('productSearch');
+    const productOptions     = document.getElementById('productOptions');
+    const productCustomWrap  = document.getElementById('productCustomWrap');
+    const productCustom      = document.getElementById('productCustom');
+    const productBackBtn     = document.getElementById('productBackBtn');
+    const productNameInput   = document.getElementById('productName');
+
+    function renderProductOptions(filter) {
+        const f = (filter || '').trim().toLowerCase();
+        const matched = f
+            ? PRODUCT_LIST.filter(p => p.toLowerCase().includes(f))
+            : PRODUCT_LIST.slice();
+
+        let html = '<div class="product-option other-option" data-value="__OTHER__" role="option">✏️ Other &mdash; Type Custom Product Name</div>';
+
+        if (matched.length === 0) {
+            html += '<div class="product-no-results">No matching products found.<br>Tap "Other" above to type a custom name.</div>';
+        } else {
+            html += matched.map(p => {
+                const idx = PRODUCT_LIST.indexOf(p) + 1;
+                return `<div class="product-option" data-value="${escapeHtml(p)}" role="option"><span class="opt-index">${idx}.</span><span class="opt-name">${escapeHtml(p)}</span></div>`;
+            }).join('');
+        }
+        productOptions.innerHTML = html;
+    }
+
+    function openProductDropdown() {
+        productSelector.classList.add('open');
+        productDropdown.hidden = false;
+        productSelectBtn.setAttribute('aria-expanded', 'true');
+        productSearch.value = '';
+        renderProductOptions('');
+        if (window.matchMedia('(min-width: 768px)').matches) {
+            setTimeout(() => productSearch.focus(), 50);
+        }
+    }
+
+    function closeProductDropdown() {
+        productSelector.classList.remove('open');
+        productDropdown.hidden = true;
+        productSelectBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function setSelectedProduct(name) {
+        productNameInput.value = name;
+        productSelectLabel.textContent = name;
+        productSelectLabel.classList.remove('placeholder');
+        productCustomWrap.hidden = true;
+        productSelectBtn.style.display = '';
+    }
+
+    function enterCustomMode(prefillValue) {
+        productCustomWrap.hidden = false;
+        productSelectBtn.style.display = 'none';
+        productCustom.value = prefillValue || '';
+        productNameInput.value = prefillValue || '';
+        closeProductDropdown();
+        setTimeout(() => productCustom.focus(), 50);
+    }
+
+    function resetProductField() {
+        productNameInput.value = '';
+        productSelectLabel.textContent = 'Select Product...';
+        productSelectLabel.classList.add('placeholder');
+        productCustomWrap.hidden = true;
+        productSelectBtn.style.display = '';
+        productCustom.value = '';
+        closeProductDropdown();
+    }
+
+    function setProductFromHistory(name) {
+        if (!name) { resetProductField(); return; }
+        if (PRODUCT_LIST.includes(name)) {
+            setSelectedProduct(name);
+        } else {
+            enterCustomMode(name);
+        }
+    }
+
+    productSelectBtn.addEventListener('click', () => {
+        if (productDropdown.hidden) openProductDropdown(); else closeProductDropdown();
+    });
+
+    productSearch.addEventListener('input', () => renderProductOptions(productSearch.value));
+    productSearch.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { closeProductDropdown(); productSelectBtn.focus(); }
+    });
+
+    productOptions.addEventListener('click', (e) => {
+        const opt = e.target.closest('.product-option');
+        if (!opt) return;
+        const val = opt.dataset.value;
+        if (val === '__OTHER__') {
+            enterCustomMode('');
+        } else {
+            setSelectedProduct(val);
+            closeProductDropdown();
+        }
+    });
+
+    productCustom.addEventListener('input', () => {
+        productNameInput.value = productCustom.value;
+    });
+
+    productBackBtn.addEventListener('click', () => {
+        productCustomWrap.hidden = true;
+        productSelectBtn.style.display = '';
+        productNameInput.value = '';
+        productSelectLabel.textContent = 'Select Product...';
+        productSelectLabel.classList.add('placeholder');
+        openProductDropdown();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!productSelector.contains(e.target)) closeProductDropdown();
+    });
+
+    // --- 6. Database Submission Logic ---
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
+
+    const form = document.forms['return-form'];
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMessage = document.getElementById('status-message');
+
+    function validateForm() {
+        // Native required check on visible inputs
+        const requiredEls = form.querySelectorAll('[required]');
+        for (const el of requiredEls) {
+            if (!el.value) {
+                el.focus();
+                statusMessage.innerText = 'PLEASE FILL ALL REQUIRED FIELDS.';
+                statusMessage.className = 'message error';
+                return false;
+            }
+        }
+        // Hidden productName check
+        if (!productNameInput.value.trim()) {
+            statusMessage.innerText = 'PLEASE SELECT OR TYPE A PRODUCT NAME.';
+            statusMessage.className = 'message error';
+            productSelectBtn.focus();
+            return false;
+        }
+        return true;
+    }
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'SUBMITTING...';
+        statusMessage.className = 'message';
+        statusMessage.innerText = '';
+
+        const formData = new FormData(form);
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                statusMessage.innerText = '✓ SUCCESS — PACKAGE LOGGED.';
+                statusMessage.className = 'message success';
+
+                const currentData = {
+                    platform: document.getElementById('platform').value,
+                    courier: document.getElementById('courier').value,
+                    returnDate: document.getElementById('returnDate').value,
+                    orderId: document.getElementById('orderId').value,
+                    productName: productNameInput.value,
+                    address: document.getElementById('address').value,
+                    condition: document.getElementById('condition').value
+                };
+                saveToHistory(currentData);
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit Return Data';
+                form.reset();
+                syncCourierToPlatform('');   // re-enable all courier options
+                resetProductField();
+                setCurrentDateTime();
+                document.getElementById('returnDate').valueAsDate = new Date();
+
+                setTimeout(() => { statusMessage.className = 'message'; }, 3500);
+            })
+            .catch(error => {
+                console.error('Error!', error);
+                statusMessage.innerText = '✗ ERROR SAVING DATA. PLEASE TRY AGAIN.';
+                statusMessage.className = 'message error';
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Submit Return Data';
+            });
+    });
+</script>
+
+</body>
+</html>
