@@ -109,7 +109,7 @@
         .hero {
             position: relative;
             background-color: var(--ibi-black);
-            padding: 28px 16px 36px;
+            padding: 14px 16px 16px;
             border-bottom: 2px solid var(--ibi-cyan);
         }
         .hero-inner {
@@ -118,11 +118,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 6px;
         }
         .hero-logo {
-            width: 100%;
-            max-width: 560px;
+            width: auto;
+            max-width: 100%;
+            max-height: 48px;
             height: auto;
             display: block;
             user-select: none;
@@ -760,8 +761,8 @@
            MOBILE RESPONSIVE
            =================================================== */
         @media (max-width: 480px) {
-            .hero { padding: 22px 14px 28px; }
-            .hero-logo { max-width: 100%; }
+            .hero { padding: 12px 14px 14px; }
+            .hero-logo { max-width: 100%; max-height: 44px; }
             .theme-switch-wrap { top: 12px; right: 12px; gap: 6px; }
             .theme-label-text { display: none; }
             .version-top {
@@ -815,7 +816,7 @@
     <header class="hero">
         <div class="version-top" id="versionTop" title="App Version">
             <span class="version-dot"></span>
-            <span id="versionTopText">v3.5</span>
+            <span id="versionTopText">v3.6</span>
         </div>
         <div class="theme-switch-wrap">
             <span class="theme-label-text" id="themeLabel">Light</span>
@@ -1006,7 +1007,7 @@
     //                        Google Apps Script backend, 24-entry local memory,
     //                        light/dark theme toggle.
     // =====================================================
-    const APP_VERSION = '3.5';
+    const APP_VERSION = '3.6';
 
     // --- 0. IBI Master Product List (synced from Google Sheets) ---
     const PRODUCT_LIST = [
