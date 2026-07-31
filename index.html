@@ -1,1016 +1,719 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#000000">
-    <title>IBI Returns Logger</title>
-    <!-- Open Graph / social sharing -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="India Business International">
-    <meta property="og:title" content="IBI Returns Logger">
-    <meta property="og:description" content="Log and analyse marketplace returns — reasons, costs and product-level return rates.">
-    <meta property="og:url" content="https://returns.indiabusinessinternational.online/">
-    <meta property="og:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="IBI Returns Logger — India Business International">
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IBI Returns Logger">
-    <meta name="twitter:description" content="Log and analyse marketplace returns — reasons, costs and product-level return rates.">
-    <meta name="twitter:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="IBI Returns">
+<meta name="description" content="Log and analyse marketplace returns — platform, courier, order, product, condition — then browse, search, edit and export every entry. By India Business International.">
+<title>IBI Returns Logger</title>
 
-    <!-- Inline SVG favicon: "IBI" in #00c5ff on black, bold Roboto-style -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23000'/><text x='50' y='52' font-family='Roboto, Arial, sans-serif' font-weight='900' font-size='44' fill='%2300c5ff' text-anchor='middle' dominant-baseline='central' letter-spacing='-1.5'>IBI</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23000'/><text x='50' y='52' font-family='Roboto, Arial, sans-serif' font-weight='900' font-size='44' fill='%2300c5ff' text-anchor='middle' dominant-baseline='central' letter-spacing='-1.5'>IBI</text></svg>">
+<!-- ── Open Graph / social preview ── -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="India Business International">
+<meta property="og:url" content="https://returns.indiabusinessinternational.online/">
+<meta property="og:title" content="IBI Returns Logger">
+<meta property="og:description" content="Log and analyse marketplace returns — platform, courier, order, product, condition — then browse, search, edit and export every entry.">
+<meta property="og:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
+<meta property="og:image:secure_url" content="https://returns.indiabusinessinternational.online/og-banner.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="IBI Returns Logger — India Business International">
+<meta property="og:locale" content="en_IN">
+<!-- ── Twitter Card ── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IBI Returns Logger">
+<meta name="twitter:description" content="Log and analyse marketplace returns — platform, courier, order, product, condition — then browse, search, edit and export every entry.">
+<meta name="twitter:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
+<meta name="twitter:image:alt" content="IBI Returns Logger preview banner">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 184 184'><rect width='184' height='184' rx='30' fill='%23000'/><g fill='%2300c5ff'><circle cx='24' cy='24' r='4.5'/><circle cx='58' cy='24' r='7.5'/><circle cx='92' cy='24' r='10.5'/><circle cx='126' cy='24' r='13.5'/><circle cx='160' cy='24' r='16.5'/><circle cx='24' cy='58' r='4.5'/><circle cx='58' cy='58' r='7.5'/><circle cx='92' cy='58' r='10.5'/><circle cx='126' cy='58' r='13.5'/><circle cx='160' cy='58' r='16.5'/><circle cx='24' cy='92' r='4.5'/><circle cx='58' cy='92' r='7.5'/><circle cx='92' cy='92' r='10.5'/><circle cx='126' cy='92' r='13.5'/><circle cx='160' cy='92' r='16.5'/><circle cx='24' cy='126' r='4.5'/><circle cx='58' cy='126' r='7.5'/><circle cx='92' cy='126' r='10.5'/><circle cx='126' cy='126' r='13.5'/><circle cx='160' cy='126' r='16.5'/><circle cx='24' cy='160' r='4.5'/><circle cx='58' cy='160' r='7.5'/><circle cx='92' cy='160' r='10.5'/><circle cx='126' cy='160' r='13.5'/><circle cx='160' cy='160' r='16.5'/></g></svg>">
 
-    <style>
-        /* ===================================================
-           IBI BRAND DESIGN TOKENS
-           =================================================== */
-        :root {
-            /* Brand */
-            --ibi-cyan:        #00c5ff;
-            --ibi-cyan-hover:  #33d4ff;
-            --ibi-cyan-soft:   rgba(0, 197, 255, 0.12);
-            --ibi-cyan-ring:   rgba(0, 197, 255, 0.30);
-            --ibi-black:       #000000;
-            --ibi-black-soft:  #0a0a0a;
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cyan:#00c5ff;
+  --cyan-dark:#009ac7;
+  --black:#000000;
+  --bg:#0a0a0a;
+  --bg2:#141414;
+  --bg3:#1c1c1c;
+  --bg4:#242424;
+  --text:#f0f0f0;
+  --text2:#aaa;
+  --text3:#666;
+  --border:#2a2a2a;
+  --border2:#333;
+  --success-bg:#0d2e0d;--success-text:#5dd45d;--success-border:#1e5c1e;
+  --danger-bg:#2e0d0d;--danger-text:#ff7070;--danger-border:#5c1e1e;
+  --warning-bg:#2e200d;--warning-text:#ffb84d;--warning-border:#5c3e1e;
+  --info-bg:#0d1e2e;--info-text:#4db8ff;--info-border:#1e3e5c;
+  --amber:#ffb84d;
+  --radius:10px;--radius-lg:14px;--radius-xl:18px;
+  --font:'Roboto',sans-serif;
+}
+body[data-theme="light"]{
+  --bg:#f0f4f8;--bg2:#ffffff;--bg3:#e8ecf0;--bg4:#dde3ea;
+  --text:#1a1a2e;--text2:#555;--text3:#999;
+  --border:#d0d7df;--border2:#bcc5cf;
+  --success-bg:#e6f7e6;--success-text:#1a6b1a;--success-border:#a3d9a3;
+  --danger-bg:#fdeaea;--danger-text:#8b1a1a;--danger-border:#f5a5a5;
+  --warning-bg:#fef6e4;--warning-text:#7a4a00;--warning-border:#ffd080;
+  --info-bg:#e4f0fd;--info-text:#0c447c;--info-border:#85b7eb;
+}
 
-            /* Light mode surfaces */
-            --bg:              #f4f6fa;
-            --surface:         #ffffff;
-            --text:            #0d1117;
-            --text-muted:      #5b6470;
-            --border:          #e2e6ec;
-            --input-bg:        #fafbfc;
-            --history-bg:      #f6f8fb;
-            --history-hover:   #eef2f7;
-            --danger:          #ef4444;
-            --success-bg:      #dcfce7;
-            --success-border:  #bbf7d0;
-            --success-text:    #166534;
-            --error-bg:        #fee2e2;
-            --error-border:    #fecaca;
-            --error-text:      #991b1b;
-            --shadow-card:     0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-popover:  0 10px 30px rgba(0, 0, 0, 0.15);
-        }
+html,body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+body{color-scheme:dark}
+body[data-theme="light"]{color-scheme:light}
 
-        body[data-theme="dark"] {
-            --bg:              #0a0e14;
-            --surface:         #131a23;
-            --text:            #f0f3f6;
-            --text-muted:      #8b95a3;
-            --border:          #1f2731;
-            --input-bg:        #0e141b;
-            --history-bg:      #0e141b;
-            --history-hover:   #1a2129;
-            --danger:          #f87171;
-            --success-bg:      rgba(34, 197, 94, 0.15);
-            --success-border:  rgba(34, 197, 94, 0.4);
-            --success-text:    #4ade80;
-            --error-bg:        rgba(239, 68, 68, 0.15);
-            --error-border:    rgba(239, 68, 68, 0.4);
-            --error-text:      #fca5a5;
-            --shadow-card:     0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0,0,0,0.4);
-            --shadow-popover:  0 10px 30px rgba(0, 0, 0, 0.6);
-        }
+/* ── TOPBAR ── */
+.topbar{background:var(--black);border-bottom:2px solid var(--cyan);position:sticky;top:0;z-index:200;padding:0 16px}
+.topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px;gap:10px}
+.topbar-left{display:flex;align-items:center;gap:10px;min-width:0}
+.ibi-logo{width:38px;height:38px;border-radius:8px;background:var(--black);border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ibi-logo span{font-family:var(--font);font-weight:700;font-size:12px;color:var(--cyan);letter-spacing:0.5px}
+.ibi-logo .mark{width:26px;height:26px;fill:var(--cyan)}
+.hero-logo .mark{width:50px;height:50px;fill:var(--cyan)}
+.app-name{color:var(--cyan);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ver-badge{font-size:10px;font-weight:700;background:var(--cyan);color:#000;padding:2px 7px;border-radius:20px;letter-spacing:0.04em;flex-shrink:0}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tbar-btn{background:none;border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;padding:6px 10px;font-size:12px;font-family:var(--font);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tbar-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.tbar-btn.install-btn{border-color:var(--cyan);color:var(--cyan);font-weight:600}
+.tbar-btn.install-btn:hover{background:var(--cyan);color:#000}
 
-        /* ===================================================
-           BASE
-           =================================================== */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 16px;
-            line-height: 1.5;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+/* ── DARK/LIGHT TOGGLE ── */
+.toggle-wrap{display:flex;align-items:center;gap:6px}
+.toggle-label{font-size:11px;color:var(--text2)}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:var(--border2);border-radius:22px;cursor:pointer;transition:background 0.2s}
+.toggle input:checked + .toggle-track{background:var(--cyan)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 0.2s;pointer-events:none}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(18px)}
 
-        /* ===================================================
-           HERO BANNER (Black with logo + theme switch)
-           =================================================== */
-        .hero {
-            position: relative;
-            background-color: var(--ibi-black);
-            padding: 14px 16px 16px;
-            border-bottom: 2px solid var(--ibi-cyan);
-        }
-        .hero-inner {
-            max-width: 720px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-        .hero-logo {
-            width: auto;
-            max-width: 100%;
-            max-height: 48px;
-            height: auto;
-            display: block;
-            user-select: none;
-        }
-        .hero-tagline {
-            color: var(--ibi-cyan);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-top: 4px;
-            opacity: 0.9;
-        }
+/* ── HERO SECTION ── */
+.hero{background:var(--black);border-bottom:1px solid var(--border);padding:20px 16px 16px}
+.hero-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:18px}
+.hero-logo{width:80px;height:80px;border-radius:50%;background:var(--black);border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 18px rgba(0,197,255,0.35)}
+.hero-logo span{font-family:var(--font);font-weight:700;font-size:26px;color:var(--cyan);letter-spacing:1px}
+.hero-info{min-width:0}
+.hero-name{font-size:20px;font-weight:700;color:var(--cyan);font-family:var(--font)}
+.hero-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.hero-clock{font-size:13px;color:var(--text2);margin-top:6px;font-family:var(--font);font-weight:400}
+.hero-clock span{color:var(--cyan);font-weight:500}
 
-        /* Theme switch positioned in hero top-right */
-        .theme-switch-wrap {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+/* ── INSTALL BANNER ── */
+.install-banner{background:linear-gradient(135deg,#001a22,#002e3d);border-bottom:1px solid var(--cyan);padding:10px 16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.install-banner.show{display:flex}
+.install-banner-left{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cyan)}
+.install-banner-actions{display:flex;gap:8px}
+.ib-install{background:var(--cyan);color:#000;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.ib-dismiss{background:none;border:1px solid var(--border2);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font)}
+.ib-dismiss:hover{border-color:var(--text3)}
 
-        /* Version badge positioned in hero top-left (mirrors theme switch) */
-        .version-top {
-            position: absolute;
-            top: 18px;
-            left: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 11px;
-            background-color: transparent;
-            color: var(--ibi-cyan);
-            border: 1px solid var(--ibi-cyan);
-            border-radius: 999px;
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 1.8px;
-            text-transform: uppercase;
-            font-family: 'Roboto', sans-serif;
-            user-select: none;
-            cursor: default;
-            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .version-top:hover {
-            background-color: var(--ibi-cyan);
-            color: var(--ibi-black);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(0, 197, 255, 0.45);
-        }
-        .version-top .version-dot {
-            width: 5px;
-            height: 5px;
-            background-color: var(--ibi-cyan);
-            border-radius: 50%;
-            transition: background-color 0.2s ease;
-        }
-        .version-top:hover .version-dot {
-            background-color: var(--ibi-black);
-        }
-        .theme-label-text {
-            color: rgba(255,255,255,0.55);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            user-select: none;
-        }
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 52px;
-            height: 28px;
-            flex-shrink: 0;
-        }
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-            position: absolute;
-        }
-        .theme-switch .slider {
-            position: absolute;
-            inset: 0;
-            cursor: pointer;
-            background-color: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 28px;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .theme-switch .slider::before {
-            content: '☀';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 22px;
-            height: 22px;
-            background-color: var(--ibi-cyan);
-            border-radius: 50%;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), content 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            color: var(--ibi-black);
-            font-weight: 700;
-            box-shadow: 0 2px 6px rgba(0, 197, 255, 0.4);
-        }
-        .theme-switch input:checked + .slider::before {
-            transform: translateX(24px);
-            content: '☾';
-        }
-        .theme-switch input:focus-visible + .slider {
-            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
-        }
+/* ── SETUP / CONNECT BANNER ── */
+.setup-banner{background:var(--warning-bg);border-bottom:1px solid var(--warning-border);padding:11px 16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.setup-banner.show{display:flex}
+.setup-banner-left{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--warning-text);font-weight:500}
+.sb-btn{background:var(--warning-text);color:#000;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)}
 
-        /* ===================================================
-           MAIN CONTAINER
-           =================================================== */
-        .page-wrap {
-            max-width: 560px;
-            margin: 0 auto;
-            padding: 24px 16px 48px;
-        }
-        .card {
-            background-color: var(--surface);
-            border-radius: 14px;
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
+/* ── MAIN ── */
+.main{max-width:1180px;margin:0 auto;padding:16px 16px 32px}
 
-        /* ===================================================
-           SECTION HEADER STRIPS
-           Cyan text on black background — IBI signature
-           =================================================== */
-        .section-header {
-            background-color: var(--ibi-black);
-            color: var(--ibi-cyan);
-            padding: 14px 22px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 2px solid var(--ibi-cyan);
-        }
-        .section-header h2,
-        .section-header h3 {
-            margin: 0;
-            color: var(--ibi-cyan);
-            font-family: 'Roboto', sans-serif;
-            font-weight: 900;
-            font-size: 16px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            line-height: 1.2;
-            flex: 1;
-        }
-        .section-header .section-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            color: var(--ibi-cyan);
-            flex-shrink: 0;
-        }
-        .section-header .section-icon svg {
-            width: 100%;
-            height: 100%;
-        }
+/* ── SUMMARY GRID ── */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 14px 12px;position:relative;overflow:hidden}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.metric.m-products::before{background:var(--cyan)}
+.metric.m-packed::before{background:var(--success-text)}
+.metric.m-loose::before{background:var(--amber)}
+.metric.m-damage::before{background:var(--danger-text)}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:500}
+.metric-value{font-size:22px;font-weight:700;font-family:var(--font)}
+.metric-value.products{color:var(--cyan)}
+.metric-value.packed{color:var(--success-text)}
+.metric-value.loose{color:var(--amber)}
+.metric-value.damage{color:var(--danger-text)}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
-        .section-body {
-            padding: 24px 22px;
-        }
+/* ── LOW STOCK ALERT ── */
+.lowstock-alert{background:linear-gradient(180deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03));border:1px solid var(--amber);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:14px}
+.lsa-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.lsa-title{color:var(--amber);font-weight:700;font-size:13px;display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:0.04em}
+.lsa-count{background:var(--amber);color:#000;font-size:11px;font-weight:800;padding:1px 8px;border-radius:20px;letter-spacing:0}
+.lsa-view{background:none;border:1px solid var(--amber);color:var(--amber);border-radius:8px;cursor:pointer;padding:5px 10px;font-size:12px;font-family:var(--font);display:flex;align-items:center;gap:5px;white-space:nowrap}
+.lsa-view:hover{background:var(--amber);color:#000}
+.lsa-sub{font-size:11.5px;color:var(--text2);margin:6px 0 8px}
+.lsa-chips{display:flex;flex-wrap:wrap;gap:6px}
+.lsa-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--text);cursor:pointer;max-width:100%}
+.lsa-chip:hover{border-color:var(--amber)}
+.lsa-chip .lsa-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.lsa-chip b{color:var(--amber);font-weight:700}
+.lsa-more{font-size:12px;color:var(--text3);align-self:center;padding:4px 4px}
 
-        /* ===================================================
-           FORM CONTROLS
-           =================================================== */
-        .form-group { margin-bottom: 18px; }
-        .form-group:last-of-type { margin-bottom: 0; }
+/* ── SECTION HEADER ── */
+.section-hdr{background:var(--black);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.section-title{color:var(--cyan);font-weight:700;font-size:14px;font-family:var(--font);display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:0.06em}
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: 700;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-        }
-        /* Badge shown on the Courier label when auto-set by platform */
-        .auto-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            padding: 2px 7px;
-            background-color: var(--ibi-cyan);
-            color: var(--ibi-black);
-            font-size: 8px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-family: 'Roboto', sans-serif;
-            vertical-align: middle;
-            margin-left: 6px;
-        }
-        /* Courier select when auto-locked */
-        select.auto-locked {
-            border-color: var(--ibi-cyan);
-            background-color: var(--ibi-cyan-soft);
-            color: var(--text);
-            cursor: default;
-        }
-        select.auto-locked:focus {
-            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
-        }
+/* ── FORM CARD ── */
+.form-card{background:var(--bg2);border:1px solid var(--border);border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:16px;margin-bottom:14px;transition:border-color 0.2s,box-shadow 0.2s}
+.form-card.editing{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,197,255,0.15)}
+.edit-banner{background:var(--info-bg);border:1px solid var(--info-border);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.edit-banner-left{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--info-text)}
+.edit-cancel-btn{background:none;border:1px solid var(--info-border);cursor:pointer;color:var(--info-text);font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--radius);font-family:var(--font)}
+.edit-cancel-btn:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+label{font-size:12px;color:var(--text2);font-weight:500;font-family:var(--font)}
+label .hint{color:var(--text3);font-weight:400}
+input,select,textarea{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg3);color:var(--text);outline:none;transition:border-color 0.15s;font-family:var(--font)}
+textarea{resize:vertical;min-height:60px;line-height:1.4}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,197,255,0.12)}
+input[type="date"]{cursor:pointer}
+input[type="date"]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:0.85}
+.auto-note{font-size:12px;color:var(--text2);background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:11px 12px;display:flex;align-items:center;gap:7px;line-height:1.3}
+.auto-note i{color:var(--cyan);font-size:15px}
+.upd-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap}
 
-        input[type="text"],
-        input[type="date"],
-        input[type="datetime-local"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: var(--input-bg);
-            color: var(--text);
-            font-family: 'Roboto', sans-serif;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6470' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 16px;
-            padding-right: 40px;
-        }
-        body[data-theme="dark"] select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a3' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
-        }
+/* ── PRICING (collapsible) ── */
+.pricing-toggle{margin-top:14px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:11px 14px;color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font)}
+.pricing-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
+.pricing-toggle i.chev{transition:transform 0.2s}
+.pricing-toggle.open i.chev{transform:rotate(180deg)}
+.pricing-body{display:none;margin-top:12px;border:1px solid var(--border);border-radius:var(--radius);padding:14px;background:var(--bg3)}
+.pricing-body.open{display:block}
+.mkt-block{margin-bottom:14px}
+.mkt-block:last-child{margin-bottom:0}
+.mkt-hdr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.mkt-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:6px}
+.mkt-name.amazon{color:#ff9900}
+.mkt-name.flipkart{color:#2874f0}
+.mkt-avg{font-size:12px;color:var(--text2)}
+.mkt-avg b{color:var(--cyan);font-weight:700}
+.rate-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.rate-grid input{padding:9px 8px;font-size:14px;text-align:center}
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--ibi-cyan);
-            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
-            background-color: var(--surface);
-        }
+.btn-row{display:flex;gap:10px;margin-top:14px}
+.btn-save{flex:1;padding:12px;font-size:15px;font-weight:700;border:none;border-radius:var(--radius);background:var(--cyan);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.15s;font-family:var(--font)}
+.btn-save:hover{opacity:0.85}
+.btn-save:disabled{opacity:0.5;cursor:not-allowed}
+.btn-save.mode-edit{background:#4db8ff}
+.btn-clear{padding:12px 18px;font-size:14px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font)}
+.btn-clear:hover{border-color:var(--text3);color:var(--text)}
 
-        .locked-field {
-            background-color: var(--history-bg) !important;
-            color: var(--text-muted);
-            cursor: not-allowed;
-            font-weight: 500;
-        }
-        .locked-field:focus {
-            box-shadow: none;
-            border-color: var(--border);
-            background-color: var(--history-bg) !important;
-        }
+/* ── STATUS BAR ── */
+.status-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;flex-wrap:wrap}
+.status-txt{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.status-dot.online{background:var(--success-text)}
+.status-dot.error{background:var(--danger-text)}
+.status-actions{display:flex;gap:6px;flex-wrap:wrap}
+.s-btn{font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:4px;text-decoration:none}
+.s-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.s-btn.rep-btn{border-color:var(--cyan);color:var(--cyan);font-weight:600}
+.s-btn.rep-btn:hover{background:var(--cyan);color:#000}
 
-        textarea { resize: vertical; height: 88px; }
+/* ── TABLE WRAP ── */
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:0 0 var(--radius-lg) var(--radius-lg);overflow:hidden;margin-bottom:16px}
+.filter-row{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg3);flex-wrap:wrap}
+.filter-row select,.filter-row input{width:auto;font-size:13px;padding:6px 10px;background:var(--bg2)}
+.filter-summary{display:none;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--bg2);font-size:13px}
+.filter-summary .fs-label{display:flex;align-items:center;gap:5px;color:var(--cyan);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filter-summary .fs-item{color:var(--text2);white-space:nowrap}
+.filter-summary .fs-item b{font-weight:700;margin-left:4px;color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:10px 12px;text-align:left;font-weight:600;font-size:11px;color:var(--cyan);border-bottom:1px solid var(--border);background:var(--black);text-transform:uppercase;letter-spacing:0.05em;font-family:var(--font);white-space:nowrap;position:sticky;top:0;z-index:10}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-family:var(--font)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+tr.row-editing td{background:var(--info-bg) !important}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.center{text-align:center}
+.prod-cell{min-width:200px}
+.prod-name{font-weight:600;color:var(--text);line-height:1.3;display:flex;align-items:center;gap:8px}
+.prod-thumb{width:30px;height:30px;border-radius:6px;object-fit:cover;border:1px solid var(--border2);flex-shrink:0;background:var(--bg4)}
+.prod-cat{font-size:11px;color:var(--text3);margin-top:2px}
+.sub-line{font-size:11px;color:var(--text3);margin-top:1px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;font-family:var(--font);white-space:nowrap}
+.pill.in{background:var(--success-bg);color:var(--success-text)}
+.pill.out{background:var(--danger-bg);color:var(--danger-text)}
+.pill.low{background:var(--warning-bg);color:var(--warning-text)}
+.stk-packed{color:var(--success-text);font-weight:700}
+.stk-loose{color:var(--amber);font-weight:700}
+.stk-damage{color:var(--danger-text);font-weight:700}
+.stk-zero{color:var(--text3)}
+.rating-badge{display:inline-flex;align-items:center;gap:3px;font-weight:600;color:var(--amber);white-space:nowrap}
+.rating-badge i{font-size:13px}
+.price-amz{color:#ff9900;font-weight:600;white-space:nowrap}
+.price-flp{color:#4d90f0;font-weight:600;white-space:nowrap}
+.action-btn{background:none;border:none;cursor:pointer;padding:6px 9px;border-radius:7px;font-size:17px;line-height:1;color:var(--text3)}
+.action-btn.edit:hover{color:var(--cyan);background:rgba(0,197,255,0.1)}
+.action-btn.del:hover{color:var(--danger-text);background:var(--danger-bg)}
+.action-cell{display:flex;gap:6px;align-items:center;justify-content:center}
+.count-badge{font-size:11px;background:var(--bg3);color:var(--text2);padding:2px 9px;border-radius:20px;font-weight:400}
+.tbl-scroll{overflow:auto;max-height:calc(100vh - 62px);max-height:calc(100dvh - 62px);overscroll-behavior:contain}
 
-        /* ===================================================
-           SUBMIT BUTTON — Cyan with black text
-           =================================================== */
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--ibi-cyan);
-            color: var(--ibi-black);
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 900;
-            cursor: pointer;
-            font-family: 'Roboto', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 197, 255, 0.25);
-        }
-        .btn-submit:hover:not(:disabled) {
-            background-color: var(--ibi-cyan-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 197, 255, 0.4);
-        }
-        .btn-submit:active:not(:disabled) {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(0, 197, 255, 0.3);
-        }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+/* ── EMPTY / LOADING ── */
+.empty-state{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
+.empty-state i{font-size:40px;display:block;margin-bottom:10px;color:var(--text3)}
+.loading-state{text-align:center;padding:2.5rem;color:var(--text2);font-size:14px}
+.spinner{display:inline-block;width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        /* ===================================================
-           STATUS MESSAGES
-           =================================================== */
-        .message {
-            margin-top: 18px;
-            padding: 13px 16px;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-        }
-        .success {
-            background-color: var(--success-bg);
-            color: var(--success-text);
-            border: 1px solid var(--success-border);
-            display: block;
-        }
-        .error {
-            background-color: var(--error-bg);
-            color: var(--error-text);
-            border: 1px solid var(--error-border);
-            display: block;
-        }
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:12px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:9999;max-width:320px;font-family:var(--font)}
+.toast.success{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
+.toast.error{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger-border)}
+.toast.show{opacity:1}
+/* actionable toast (carries an ↩ Undo button) */
+.toast.actionable{pointer-events:auto;display:flex;align-items:center;gap:12px}
+.toast-undo{background:var(--cyan);color:#000;border:none;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+.toast-undo:hover{opacity:0.85}
+.s-btn:disabled{opacity:.4;cursor:not-allowed}
+.s-btn:disabled:hover{border-color:var(--border2);color:var(--text2)}
 
-        /* ===================================================
-           MEMORY / HISTORY SECTION
-           =================================================== */
-        .memory-card {
-            margin-top: 20px;
-        }
-        .section-header .btn-clear {
-            background: transparent;
-            border: 1.5px solid rgba(239, 68, 68, 0.5);
-            color: #fca5a5;
-            padding: 5px 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            font-family: 'Roboto', sans-serif;
-            text-transform: uppercase;
-            transition: all 0.2s ease;
-        }
-        .section-header .btn-clear:hover {
-            background: #ef4444;
-            border-color: #ef4444;
-            color: white;
-        }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 460px;
-            overflow-y: auto;
-        }
-        .history-list::-webkit-scrollbar { width: 6px; }
-        .history-list::-webkit-scrollbar-track { background: transparent; }
-        .history-list::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 10px;
-        }
-        .history-list::-webkit-scrollbar-thumb:hover {
-            background: var(--ibi-cyan);
-        }
+/* ── FOOTER ── */
+.footer{text-align:center;font-size:11px;color:var(--text3);padding:1rem 0 0.5rem;font-family:var(--font)}
 
-        .history-item {
-            padding: 14px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            background: var(--history-bg);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .history-item:hover {
-            border-color: var(--ibi-cyan);
-            background: var(--history-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 197, 255, 0.15);
-        }
-        .history-item-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            color: var(--ibi-cyan);
-            font-size: 14px;
-            margin-bottom: 8px;
-            gap: 8px;
-        }
-        .history-item-top .order-id {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .history-item-date {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .history-details {
-            color: var(--text);
-            font-size: 13px;
-            line-height: 1.6;
-        }
-        .history-details strong {
-            font-weight: 700;
-            color: var(--text);
-        }
-        .history-address {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed var(--border);
-            font-size: 12px;
-            white-space: pre-wrap;
-            color: var(--text-muted);
-        }
-        .history-empty {
-            color: var(--text-muted);
-            text-align: center;
-            padding: 28px 16px;
-            font-size: 13px;
-            font-weight: 500;
-            background: var(--history-bg);
-            border: 1.5px dashed var(--border);
-            border-radius: 10px;
-        }
+/* ── MENU DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;top:0;right:-280px;width:270px;height:100%;background:var(--bg2);border-left:1px solid var(--border);z-index:301;transition:right 0.25s;padding:0;overflow-y:auto}
+.drawer.open{right:0}
+.drawer-hdr{background:var(--black);border-bottom:2px solid var(--cyan);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.drawer-hdr-title{color:var(--cyan);font-weight:700;font-size:14px;font-family:var(--font);text-transform:uppercase;letter-spacing:0.06em}
+.drawer-close{background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1}
+.drawer-item{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text);font-size:14px;cursor:pointer;text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;font-family:var(--font);text-align:left}
+.drawer-item:hover{background:var(--bg3);color:var(--cyan)}
+.drawer-item i{font-size:18px;color:var(--cyan);width:22px;flex-shrink:0}
+.drawer-section-label{padding:10px 16px 4px;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
 
-        /* ===================================================
-           SEARCHABLE PRODUCT SELECTOR
-           =================================================== */
-        .product-selector { position: relative; }
+/* ── MODALS (report + backend) ── */
+.report-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:400;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.report-overlay.open{opacity:1;pointer-events:all}
+.report-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-48%) scale(0.98);width:min(760px,94vw);max-height:90vh;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);z-index:401;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.25s,transform 0.25s;overflow:hidden}
+.report-modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1)}
+.report-hdr{background:var(--black);border-bottom:2px solid var(--cyan);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.report-hdr-title{color:var(--cyan);font-weight:700;font-size:14px;font-family:var(--font);text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;gap:7px}
+.report-body{padding:16px;overflow-y:auto}
+.report-controls{display:flex;flex-direction:column;gap:12px;margin-bottom:6px}
+.report-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg3)}
+.rep-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.rep-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px 10px;text-align:center}
+.rep-card .lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);margin-bottom:5px}
+.rep-card .val{font-size:18px;font-weight:700;font-family:var(--font)}
+.rep-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin:16px 0 6px;display:flex;align-items:center;gap:6px;color:var(--cyan)}
+.rep-table{width:100%;border-collapse:collapse;font-size:12px}
+.rep-table th{text-align:left;padding:7px 8px;color:var(--text2);border-bottom:1px solid var(--border);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.04em}
+.rep-table td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.rep-table tfoot td{font-weight:700;border-top:2px solid var(--border2);border-bottom:none;color:var(--text)}
+.rep-table .num{text-align:right}
+.rep-empty{text-align:center;color:var(--text3);padding:20px;font-size:13px}
+.rep-empty i{display:block;font-size:30px;margin-bottom:8px}
+.help-text{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.help-text code{background:var(--bg3);padding:1px 5px;border-radius:4px;color:var(--cyan);font-size:11px}
+.help-text a{color:var(--cyan)}
+.imp-opt{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--text);line-height:1.45;padding:8px 0;cursor:pointer}
+.imp-opt input[type=radio]{margin-top:2px;flex:0 0 auto;width:16px;height:16px;accent-color:var(--cyan)}
+.imp-opt span{flex:1 1 auto;min-width:0}
+.imp-status{font-size:12.5px;color:var(--cyan);min-height:18px;margin:4px 0;font-weight:600}
+.imp-preview{max-height:190px;overflow:auto;margin-top:6px}
+.imp-preview .imp-row{font-size:11.5px;color:var(--text2);padding:4px 8px;border-bottom:1px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imp-preview .imp-more{font-size:11px;color:var(--text3);padding:6px 8px;font-style:italic}
+#importFile{font-size:12.5px;color:var(--text2);width:100%}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
 
-        .product-trigger {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--text);
-            font-size: 15px;
-            font-family: 'Roboto', sans-serif;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.15s ease;
-        }
-        .product-trigger:hover { border-color: var(--ibi-cyan); }
-        .product-selector.open .product-trigger,
-        .product-trigger:focus {
-            outline: none;
-            border-color: var(--ibi-cyan);
-            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
-            background-color: var(--surface);
-        }
-        .product-trigger-label {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .product-trigger-label.placeholder { color: var(--text-muted); }
-        .product-trigger .chevron {
-            color: var(--text-muted);
-            font-size: 12px;
-            transition: transform 0.2s ease;
-            flex-shrink: 0;
-        }
-        .product-selector.open .chevron {
-            transform: rotate(180deg);
-            color: var(--ibi-cyan);
-        }
+/* ── MOBILE ── */
+@media(max-width:640px){
+  html,body{padding:0;margin:0}
+  .topbar{padding:0 10px}
+  .topbar-inner{height:50px}
+  .hero{padding:14px 12px 12px}
+  .hero-logo{width:64px;height:64px}
+  .hero-logo span{font-size:21px}
+  .hero-name{font-size:17px}
+  .main{padding:10px 0 24px}
+  .summary-grid{grid-template-columns:1fr 1fr;gap:8px;padding:0 10px;margin-bottom:12px}
+  .metric{padding:10px 10px 8px}
+  .metric-value{font-size:18px}
+  .section-hdr{border-radius:0;border-left:none;border-right:none;padding:10px 12px}
+  .form-card{border-radius:0;border-left:none;border-right:none;padding:12px}
+  .form-grid,.form-grid-3{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .rate-grid{grid-template-columns:repeat(3,1fr)}
+  input,select,textarea{font-size:16px;padding:11px 12px}
+  .btn-save,.btn-clear{font-size:15px;padding:13px}
+  .status-bar{border-radius:0;border-left:none;border-right:none;margin:0 0 10px;padding:8px 12px}
+  .table-wrap{border-radius:0;border-left:none;border-right:none}
+  .filter-row{padding:8px 12px}
+  th,td{padding:9px 10px;font-size:12px}
+  .toast{left:10px;right:10px;bottom:10px;max-width:none}
+  .install-banner,.setup-banner{padding:10px 12px}
+  .app-name{font-size:13px}
+  .rep-summary{grid-template-columns:1fr 1fr}
+}
 
-        .product-dropdown {
-            position: absolute;
-            top: calc(100% + 6px);
-            left: 0;
-            right: 0;
-            background-color: var(--surface);
-            border: 1.5px solid var(--ibi-cyan);
-            border-radius: 10px;
-            box-shadow: var(--shadow-popover);
-            z-index: 50;
-            overflow: hidden;
-        }
-        .product-search-wrap {
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-            background-color: var(--input-bg);
-        }
-        .product-search {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 7px;
-            font-size: 14px;
-            background-color: var(--surface);
-            color: var(--text);
-        }
-        .product-search:focus {
-            outline: none;
-            border-color: var(--ibi-cyan);
-            box-shadow: 0 0 0 2px var(--ibi-cyan-ring);
-        }
-
-        .product-options {
-            max-height: 280px;
-            overflow-y: auto;
-        }
-        .product-options::-webkit-scrollbar { width: 6px; }
-        .product-options::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        .product-options::-webkit-scrollbar-thumb:hover { background: var(--ibi-cyan); }
-
-        .product-option {
-            padding: 11px 14px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text);
-            border-bottom: 1px solid var(--border);
-            transition: background-color 0.12s ease, color 0.12s ease;
-            display: flex;
-            gap: 6px;
-            align-items: baseline;
-        }
-        .product-option:last-child { border-bottom: none; }
-        .product-option:hover {
-            background-color: var(--ibi-cyan-soft);
-            color: var(--ibi-cyan);
-        }
-        .product-option .opt-index {
-            display: inline-block;
-            min-width: 32px;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-            flex-shrink: 0;
-        }
-        .product-option .opt-name {
-            font-weight: 500;
-            flex: 1;
-        }
-
-        .product-option.other-option {
-            background-color: var(--ibi-black);
-            color: var(--ibi-cyan);
-            font-weight: 700;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            border-bottom: 2px solid var(--ibi-cyan);
-            letter-spacing: 0.5px;
-        }
-        .product-option.other-option:hover {
-            background-color: var(--ibi-cyan);
-            color: var(--ibi-black);
-        }
-
-        .product-no-results {
-            padding: 24px 14px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .product-custom-input {
-            width: 100%;
-            padding: 13px 14px;
-            border: 1.5px solid var(--ibi-cyan);
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: var(--surface);
-            color: var(--text);
-            box-shadow: 0 0 0 3px var(--ibi-cyan-ring);
-        }
-        .product-custom-input:focus { outline: none; }
-
-        .product-custom-hint {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-        }
-        .product-back-btn {
-            background: transparent;
-            border: 1.5px dashed var(--border);
-            color: var(--text-muted);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-            font-family: 'Roboto', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            transition: all 0.2s ease;
-        }
-        .product-back-btn:hover {
-            border-color: var(--ibi-cyan);
-            border-style: solid;
-            color: var(--ibi-cyan);
-        }
-
-        /* ===================================================
-           FOOTER CREDIT
-           =================================================== */
-        .app-footer {
-            margin-top: 24px;
-            text-align: center;
-        }
-        .footer-credit {
-            color: var(--text-muted);
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* ===================================================
-           MOBILE RESPONSIVE
-           =================================================== */
-        @media (max-width: 480px) {
-            .hero { padding: 12px 14px 14px; }
-            .hero-logo { max-width: 100%; max-height: 44px; }
-            .theme-switch-wrap { top: 12px; right: 12px; gap: 6px; }
-            .theme-label-text { display: none; }
-            .version-top {
-                top: 14px;
-                left: 12px;
-                padding: 4px 9px;
-                font-size: 9px;
-                letter-spacing: 1.4px;
-            }
-            .version-top .version-dot { width: 4px; height: 4px; }
-            .page-wrap { padding: 18px 12px 36px; }
-            .section-header { padding: 12px 16px; }
-            .section-header h2,
-            .section-header h3 { font-size: 14px; letter-spacing: 1.5px; }
-            .section-body { padding: 20px 16px; }
-            .form-group { margin-bottom: 16px; }
-            input[type="text"],
-            input[type="date"],
-            input[type="datetime-local"],
-            select,
-            textarea,
-            .product-trigger {
-                font-size: 16px; /* iOS: prevent zoom on focus */
-            }
-        }
-
-        @media (max-width: 360px) {
-            .theme-switch { width: 46px; height: 26px; }
-            .theme-switch .slider::before { width: 20px; height: 20px; font-size: 11px; }
-            .theme-switch input:checked + .slider::before { transform: translateX(20px); }
-            .version-top { letter-spacing: 1.2px; }
-            .section-header h2,
-            .section-header h3 { font-size: 13px; letter-spacing: 1px; }
-        }
-
-        /* Reduce motion preference */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-            html { scroll-behavior: auto; }
-        }
-    </style>
+/* ── RETURNS-SPECIFIC ── */
+.metric.m-returns::before{background:var(--cyan)}
+.metric.m-month::before{background:var(--info-text)}
+.metric.m-damaged::before{background:var(--danger-text)}
+.metric.m-today::before{background:var(--amber)}
+.metric-value.returns{color:var(--cyan)}
+.metric-value.month{color:var(--info-text)}
+.metric-value.damaged{color:var(--danger-text)}
+.metric-value.today{color:var(--amber)}
+.combo-wrap{position:relative}
+.combo-wrap .combo-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;display:none;line-height:1;padding:4px}
+.combo-wrap .combo-clear.show{display:block}
+.combo-wrap .combo-clear:hover{color:var(--danger-text)}
+.src-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 8px;border-radius:20px;background:var(--bg4);color:var(--text2)}
+.src-pill.list{background:var(--info-bg);color:var(--info-text)}
+.src-pill.custom{background:var(--warning-bg);color:var(--warning-text)}
+.picked{display:none;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--text2);flex-wrap:wrap}
+.picked.show{display:flex}
+.picked .picked-name{color:var(--text);font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.auto-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;background:var(--info-bg);color:var(--info-text);text-transform:uppercase;letter-spacing:0.04em;margin-left:6px}
+select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
+.plat{font-weight:600;white-space:nowrap}
+.plat.amazon{color:#ff9900}
+.plat.flipkart{color:#4d90f0}
+.plat.shopsy{color:#f6a623}
+.plat.meesho{color:#f43397}
+.plat.shopclues{color:#7ed321}
+.plat.ibi{color:var(--cyan)}
+.order-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--text);word-break:break-all}
+.addr-cell{max-width:230px;font-size:11.5px;color:var(--text2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.action-btn.copy:hover{color:var(--amber);background:var(--warning-bg)}
+</style>
 </head>
-<body data-theme="light">
+<body>
 
-    <!-- ===================================================
-         HERO BANNER — Black with IBI logo + theme switch + version
-         =================================================== -->
-    <header class="hero">
-        <div class="version-top" id="versionTop" title="App Version">
-            <span class="version-dot"></span>
-            <span id="versionTopText">v3.8</span>
+<!-- IBI brand mark (halftone dot grid) — defined once, reused via <use> and as favicon/app icon -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ibiMark" viewBox="0 0 184 184">
+<circle cx="24" cy="24" r="4.5"/><circle cx="58" cy="24" r="7.5"/><circle cx="92" cy="24" r="10.5"/><circle cx="126" cy="24" r="13.5"/><circle cx="160" cy="24" r="16.5"/>
+<circle cx="24" cy="58" r="4.5"/><circle cx="58" cy="58" r="7.5"/><circle cx="92" cy="58" r="10.5"/><circle cx="126" cy="58" r="13.5"/><circle cx="160" cy="58" r="16.5"/>
+<circle cx="24" cy="92" r="4.5"/><circle cx="58" cy="92" r="7.5"/><circle cx="92" cy="92" r="10.5"/><circle cx="126" cy="92" r="13.5"/><circle cx="160" cy="92" r="16.5"/>
+<circle cx="24" cy="126" r="4.5"/><circle cx="58" cy="126" r="7.5"/><circle cx="92" cy="126" r="10.5"/><circle cx="126" cy="126" r="13.5"/><circle cx="160" cy="126" r="16.5"/>
+<circle cx="24" cy="160" r="4.5"/><circle cx="58" cy="160" r="7.5"/><circle cx="92" cy="160" r="10.5"/><circle cx="126" cy="160" r="13.5"/><circle cx="160" cy="160" r="16.5"/>
+</symbol></svg>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
+      <div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v4.0</span></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="toggle-wrap">
+        <span class="toggle-label" id="themeLabel">Dark</span>
+        <label class="toggle">
+          <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <button class="tbar-btn" onclick="openDrawer()"><i class="ti ti-menu-2"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- BACKEND SETUP BANNER -->
+<div class="setup-banner" id="setupBanner">
+  <div class="setup-banner-left"><i class="ti ti-plug-connected" style="font-size:18px"></i> <span id="setupBannerTxt">Connect your Google Sheet backend to start logging returns.</span></div>
+  <button class="sb-btn" onclick="openBackend()"><i class="ti ti-settings"></i> Backend</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
+    <div class="hero-info">
+      <div class="hero-name">India Business International</div>
+      <div class="hero-sub">Marketplace Returns &amp; Package Condition — Kanyakumari</div>
+      <div class="hero-clock"><span id="liveClock">Loading...</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- SUMMARY -->
+  <div class="summary-grid">
+    <div class="metric m-returns">
+      <div class="metric-label"><i class="ti ti-package-import"></i> Returns</div>
+      <div class="metric-value returns" id="sumReturns">0</div>
+      <div class="metric-sub">packages logged</div>
+    </div>
+    <div class="metric m-month">
+      <div class="metric-label"><i class="ti ti-calendar-month"></i> This Month</div>
+      <div class="metric-value month" id="sumMonth">0</div>
+      <div class="metric-sub" id="sumMonthName">&mdash;</div>
+    </div>
+    <div class="metric m-damaged">
+      <div class="metric-label"><i class="ti ti-alert-triangle"></i> Damaged</div>
+      <div class="metric-value damaged" id="sumDamaged">0</div>
+      <div class="metric-sub" id="sumDamagedSub">bad or slightly damaged</div>
+    </div>
+    <div class="metric m-today">
+      <div class="metric-label"><i class="ti ti-calendar-event"></i> Logged Today</div>
+      <div class="metric-value today" id="sumToday">0</div>
+      <div class="metric-sub" id="sumTodayDate">&mdash;</div>
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-txt"><span class="status-dot" id="statusDot"></span><span id="statusTxt">Connecting...</span></span>
+    <span class="status-actions">
+      <button class="s-btn" onclick="loadAll()"><i class="ti ti-refresh"></i> Sync</button>
+      <button class="s-btn" onclick="exportCSV()"><i class="ti ti-download"></i> CSV</button>
+    </span>
+  </div>
+
+  <!-- FORM -->
+  <div class="section-hdr">
+    <div class="section-title"><i class="ti ti-package-import"></i> <span id="formTitle">Log a Return</span></div>
+  </div>
+  <div class="form-card" id="formCard">
+
+    <div class="edit-banner" id="editBanner" style="display:none">
+      <span class="edit-banner-left"><i class="ti ti-pencil"></i> Editing <b id="editName">&nbsp;</b></span>
+      <button class="edit-cancel-btn" onclick="cancelEdit()">Cancel edit</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="fPlatform">Platform</label>
+        <select id="fPlatform" onchange="syncCourier(this.value)">
+          <option value="">Select platform…</option>
+          <option>Amazon</option>
+          <option>Amazon Bazaar</option>
+          <option>Flipkart</option>
+          <option>Shopsy</option>
+          <option>Meesho</option>
+          <option>ShopClues</option>
+          <option>IBI Website</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fCourier" id="courierLabel">Courier</label>
+        <select id="fCourier">
+          <option value="">Select courier…</option>
+          <option>Amazon ATS</option>
+          <option>eKart</option>
+          <option>Delhivery</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fReturnDate">Date of Return</label>
+        <input type="date" id="fReturnDate">
+      </div>
+
+      <div class="form-group">
+        <label>Logged On</label>
+        <div class="auto-note"><i class="ti ti-clock-hour-4"></i> Date &amp; time stamped automatically when you save.</div>
+      </div>
+
+      <div class="form-group full">
+        <label for="fOrderId">Order ID</label>
+        <input type="text" id="fOrderId" placeholder="e.g. 404-1234567-8901234" autocomplete="off">
+      </div>
+
+      <div class="form-group full">
+        <label for="fProduct">Product Name <span class="hint">— pick from the catalogue or type a new one</span></label>
+        <div class="combo-wrap">
+          <input type="text" id="fProduct" list="productOptions" autocomplete="off" maxlength="220"
+                 placeholder="Type to search products, or type a new name…" oninput="syncProduct()" onchange="syncProduct()">
+          <button type="button" class="combo-clear" id="comboClear" title="Clear" onclick="clearProduct()">&times;</button>
         </div>
-        <div class="theme-switch-wrap">
-            <span class="theme-label-text" id="themeLabel">Light</span>
-            <label class="theme-switch" for="themeToggle" aria-label="Toggle dark mode">
-                <input type="checkbox" id="themeToggle">
-                <span class="slider"></span>
-            </label>
+        <datalist id="productOptions"></datalist>
+        <div class="picked" id="pickedBox">
+          <span class="picked-name" id="pickedName">&mdash;</span>
+          <span class="src-pill" id="pickedSrc">List</span>
         </div>
-        <div class="hero-inner">
-            <img src="logo.png" alt="India Business International — eCommerce for the World" class="hero-logo" onerror="this.style.display='none'">
-            <div class="hero-tagline">Returns Logger</div>
-        </div>
-    </header>
+      </div>
 
-    <!-- ===================================================
-         MAIN CONTENT
-         =================================================== -->
-    <main class="page-wrap">
+      <div class="form-group full">
+        <label for="fAddress">From Address</label>
+        <textarea id="fAddress" placeholder="Customer return address"></textarea>
+      </div>
 
-        <!-- Return Details Card -->
-        <section class="card" aria-labelledby="returnDetailsTitle">
-            <div class="section-header">
-                <span class="section-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                        <line x1="12" y1="22.08" x2="12" y2="12"/>
-                    </svg>
-                </span>
-                <h2 id="returnDetailsTitle">Return Details</h2>
-            </div>
+      <div class="form-group">
+        <label for="fCondition">Condition of Package</label>
+        <select id="fCondition">
+          <option value="">Select condition…</option>
+          <option>Good</option>
+          <option>Bad</option>
+          <option>Slight Damage</option>
+        </select>
+      </div>
+    </div>
 
-            <div class="section-body">
-                <form id="return-form" novalidate>
+    <div class="btn-row">
+      <button class="btn-save" id="btnSave" onclick="saveEntry()">
+        <i class="ti ti-device-floppy"></i> <span id="btnSaveLabel">Save to Google Sheet</span>
+      </button>
+      <button class="btn-clear" onclick="cancelEdit()">Clear</button>
+    </div>
+  </div>
 
-                    <div class="form-group">
-                        <label for="platform">Platform</label>
-                        <select id="platform" name="platform" required>
-                            <option value="" disabled selected>Select Platform...</option>
-                            <option>Amazon</option>
-                            <option>Amazon Bazaar</option>
-                            <option>Flipkart</option>
-                            <option>Shopsy</option>
-                            <option>Meesho</option>
-                            <option>ShopClues</option>
-                            <option>IBI Website</option>
-                        </select>
-                    </div>
+  <!-- TABLE -->
+  <div class="section-hdr" style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin-top:4px">
+    <div class="section-title"><i class="ti ti-table"></i> Logged Returns <span class="count-badge" id="countBadge">0</span></div>
+  </div>
+  <div class="table-wrap">
+    <div class="filter-row">
+      <select id="filterPlatform" onchange="render()">
+        <option value="all">All platforms</option>
+      </select>
+      <select id="filterCondition" onchange="render()">
+        <option value="all">All conditions</option>
+        <option value="Good">Good</option>
+        <option value="Slight Damage">Slight Damage</option>
+        <option value="Bad">Bad</option>
+      </select>
+      <select id="filterSort" onchange="render()">
+        <option value="logged-desc" selected>Date logged &darr;</option>
+        <option value="logged-asc">Date logged &uarr;</option>
+        <option value="return-desc">Return date &darr;</option>
+        <option value="added-desc">Recently added</option>
+        <option value="platform-asc">Platform A&ndash;Z</option>
+        <option value="product-asc">Product A&ndash;Z</option>
+      </select>
+      <input type="text" id="filterSearch" placeholder="Search order / product / address..." oninput="render()" style="width:230px">
+    </div>
+    <div class="filter-summary" id="filterSummary">
+      <span class="fs-label" id="fsLabel"></span>
+      <span class="fs-item">Returns <b id="fsCount">0</b></span>
+      <span class="fs-item">Products <b id="fsProducts">0</b></span>
+      <span class="fs-item">Damaged <b id="fsDamaged">0</b></span>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:44px">#</th>
+            <th style="width:104px">Return Date</th>
+            <th style="width:110px">Platform</th>
+            <th style="width:150px">Order ID</th>
+            <th>Product</th>
+            <th style="width:230px">From Address</th>
+            <th class="center" style="width:104px">Condition</th>
+            <th style="width:118px">Logged</th>
+            <th class="center" style="width:110px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="entryBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <i class="ti ti-inbox"></i>No returns yet. Log one above.
+      </div>
+      <div id="loadingState" class="loading-state">
+        <div class="spinner" style="display:block;margin:0 auto 10px"></div>
+        Loading from Google Sheet...
+      </div>
+    </div>
+  </div>
 
-                    <div class="form-group">
-                        <label for="courier">Courier Name</label>
-                        <select id="courier" name="courier" required>
-                            <option value="" disabled selected>Select Courier...</option>
-                            <option>Amazon ATS</option>
-                            <option>eKart</option>
-                            <option>Delhivery</option>
-                        </select>
-                    </div>
+  <div class="footer">IBI Returns Logger v4.0 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+</div>
 
-                    <div class="form-group">
-                        <label for="dateTime">System Entry Time (Auto-Locked)</label>
-                        <input type="datetime-local" id="dateTime" name="dateTime" class="locked-field" readonly required>
-                    </div>
+<!-- DRAWER MENU -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-hdr">
+    <span class="drawer-hdr-title"><i class="ti ti-menu-2"></i> Menu</span>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-section-label">App</div>
+  <button class="drawer-item" onclick="loadAll();closeDrawer()"><i class="ti ti-refresh"></i> Sync with Google Sheet</button>
+  <button class="drawer-item" onclick="exportCSV();closeDrawer()"><i class="ti ti-download"></i> Export CSV</button>
+  <a class="drawer-item" href="https://docs.google.com/spreadsheets/d/1GyHnZbfsqY9nyXggWhrEwSPbYYZ4cDhgdjDqmsB5juE/edit#gid=0" target="_blank" rel="noopener" onclick="closeDrawer()"><i class="ti ti-external-link"></i> Open Google Sheet</a>
+  <div class="drawer-section-label">Settings</div>
+  <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
+  <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
+  <div class="drawer-section-label">About</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 4.0 &mdash; July 2026 &middot; Returns list + auto date &amp; time</div>
+</div>
 
-                    <div class="form-group">
-                        <label for="returnDate">Date of Return</label>
-                        <input type="date" id="returnDate" name="returnDate" required>
-                    </div>
+<!-- BACKEND MODAL -->
+<div class="report-overlay" id="backendOverlay" onclick="closeBackend()"></div>
+<div class="report-modal" id="backendModal" role="dialog" aria-modal="true" aria-label="Backend Connection">
+  <div class="report-hdr">
+    <span class="report-hdr-title"><i class="ti ti-plug"></i> Backend Connection</span>
+    <button class="drawer-close" onclick="closeBackend()" aria-label="Close"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="report-body">
+    <div class="help-text">
+      This app reads and writes the <b>Return Packages</b> Google Sheet through an Apps Script
+      Web App. Leave this blank to use the built-in default URL. After pasting new
+      <code>.gs</code> code, redeploy with <b>Manage deployments &rarr; Edit &rarr; New version</b>
+      so the URL stays the same.
+    </div>
+    <div class="form-group">
+      <label for="fBackendUrl">Apps Script Web App URL <span class="hint">(ends in /exec)</span></label>
+      <input type="text" id="fBackendUrl" placeholder="https://script.google.com/macros/s/.../exec" class="mono">
+    </div>
+    <div class="btn-row">
+      <button class="btn-save" onclick="saveBackend()"><i class="ti ti-device-floppy"></i> Save</button>
+      <button class="btn-clear" onclick="testBackend()">Test</button>
+    </div>
+  </div>
+</div>
 
-                    <div class="form-group">
-                        <label for="orderId">Order ID</label>
-                        <input type="text" id="orderId" name="orderId" placeholder="e.g. 404-1234567-8901234" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="productSelectBtn">Product Name</label>
-                        <div class="product-selector" id="productSelector">
-                            <button type="button" id="productSelectBtn" class="product-trigger" aria-haspopup="listbox" aria-expanded="false">
-                                <span id="productSelectLabel" class="product-trigger-label placeholder">Select Product...</span>
-                                <span class="chevron" aria-hidden="true">▾</span>
-                            </button>
-
-                            <div id="productDropdown" class="product-dropdown" hidden>
-                                <div class="product-search-wrap">
-                                    <input type="text" id="productSearch" class="product-search" placeholder="🔍 Search products..." autocomplete="off">
-                                </div>
-                                <div id="productOptions" class="product-options" role="listbox"></div>
-                            </div>
-
-                            <div id="productCustomWrap" hidden>
-                                <input type="text" id="productCustom" class="product-custom-input" placeholder="Type product name" autocomplete="off">
-                                <div class="product-custom-hint">Manual entry — product not in standard catalogue.</div>
-                                <button type="button" id="productBackBtn" class="product-back-btn">↩ Back to Product List</button>
-                            </div>
-
-                            <input type="hidden" id="productName" name="productName">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="address">From Address</label>
-                        <textarea id="address" name="address" placeholder="Customer return address" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="condition">Condition of Package</label>
-                        <select id="condition" name="condition" required>
-                            <option value="" disabled selected>Select Condition...</option>
-                            <option>Good</option>
-                            <option>Bad</option>
-                            <option>Slight Damage</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="btn-submit">Submit Return Data</button>
-                    <div id="status-message" class="message" role="status" aria-live="polite"></div>
-                </form>
-            </div>
-        </section>
-
-        <!-- Memory Card -->
-        <section class="card memory-card" aria-labelledby="memoryTitle">
-            <div class="section-header">
-                <span class="section-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </span>
-                <h3 id="memoryTitle">Memory · Tap to Reuse</h3>
-                <button class="btn-clear" onclick="clearHistory()" id="clearBtn" style="display: none;">Clear All</button>
-            </div>
-            <div class="section-body">
-                <div id="history-list" class="history-list"></div>
-            </div>
-        </section>
-
-        <!-- Footer Credit -->
-        <div class="app-footer">
-            <div class="footer-credit">© India Business International</div>
-        </div>
-    </main>
+<div class="toast" id="toast"></div>
 
 <script>
-    // =====================================================
-    //  IBI RETURNS LOGGER — VERSION TRACKING
-    // -----------------------------------------------------
-    //  To release a new version, update APP_VERSION below:
-    //
-    //    • SMALL PATCH (bug fix, tweak, UI polish, copy change):
-    //        bump the MINOR number after the dot.
-    //        e.g.  '3'  →  '3.1'  →  '3.2'  →  '3.3' …
-    //
-    //    • BIG FEATURE (new functionality, major rework):
-    //        bump the MAJOR number and drop the minor.
-    //        e.g.  '3.4'  →  '4'  →  '4.1'  →  '4.2' …
-    //
-    //  The badge in the footer updates automatically from APP_VERSION.
-    //  Add a one-line entry to the changelog for every release.
-    //
-    //  Changelog:
-    //    v3.2 (2026-05-29) — Platform → Courier auto-lock. Selecting a
-    //                        platform auto-sets the correct courier and
-    //                        dims the non-applicable options:
-    //                        Amazon / Amazon Bazaar → Amazon ATS
-    //                        Flipkart / Shopsy → eKart
-    //                        Meesho / ShopClues / IBI Website → Delhivery
-    //                        Courier label shows ⚡ AUTO badge and cyan
-    //                        border when locked. Resets on form clear.
-    //    v3.1 (2026-05-25) — Moved version badge to hero banner top-left.
-    //    v3   (2026-05-25) — Full UI rebuild on IBI brand identity.
-    //                        Cyan (#00c5ff) on black section headers,
-    //                        prominent logo banner with cyan underline,
-    //                        proper toggle-switch theme control with
-    //                        sun/moon glyphs, inline SVG "IBI" favicon,
-    //                        Roboto throughout, mobile-first responsive
-    //                        layout (480px / 360px breakpoints, iOS
-    //                        zoom-on-focus prevention, reduced-motion
-    //                        support). Refined product selector and
-    //                        memory cards with cyan accent system.
-    //    v2.1 (2026-05-25) — Adopted minor versioning scheme (vX.Y format)
-    //                        with in-file documentation of the convention.
-    //    v2   (2026-05-25) — Added IBI master product list (102 items) with
-    //                        searchable dropdown + custom-text "Other" option.
-    //                        Manual validation for hidden field.
-    //    v1   (initial)    — Baseline: Returns Logger with platform / courier /
-    //                        order / product / address / condition fields,
-    //                        Google Apps Script backend, 24-entry local memory,
-    //                        light/dark theme toggle.
-    // =====================================================
-    const APP_VERSION = '3.8';
+// ═══════════════════════════════════════════════════════════════════════════
+//  IBI RETURNS LOGGER — v4.0
+// ---------------------------------------------------------------------------
+//  v4.0 (31 Jul 2026) — The app is no longer write-only. Every return in the
+//                       Google Sheet is listed, searchable, sortable, editable
+//                       and deletable, in the same table shell as IBI Stock
+//                       Availability / IBI Finance Tracker. The old 24-item
+//                       device-local memory is gone — the sheet is the single
+//                       source of truth, so entries follow you across devices.
+//                       The "System Entry Time (Auto-Locked)" field is gone
+//                       too: the SERVER now stamps date + time (IST) on every
+//                       save and every edit, so a wrong device clock can no
+//                       longer reach the sheet.
+//                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
+//  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
+// ═══════════════════════════════════════════════════════════════════════════
+const APP_VERSION = '4.0';
 
-    // --- 0. IBI Master Product List (synced from Google Sheets) ---
-    const PRODUCT_LIST = [
+// Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
+// deployments -> Edit -> New version) so this URL keeps working.
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
+const URL_KEY   = 'ibi_returns_gas_url';
+const THEME_KEY = 'ibi_returns_theme';
+let GAS_URL = (localStorage.getItem(URL_KEY) || '').trim() || DEFAULT_GAS_URL;
+
+// Each marketplace ships back through one courier — pre-select it, but the
+// picker stays usable in case a parcel ever arrives by another route.
+const PLATFORM_COURIER = {
+  'Amazon':'Amazon ATS', 'Amazon Bazaar':'Amazon ATS',
+  'Flipkart':'eKart', 'Shopsy':'eKart',
+  'Meesho':'Delhivery', 'ShopClues':'Delhivery', 'IBI Website':'Delhivery'
+};
+
+const PRODUCT_LIST = [
     "Aari Work Stand - Iron, 48.5x48.5x34 cm, 1353 gm, 1 Qty",
     "Aluminium 11 Idli Maker, Heavy Weight, 26x26x18 cm, 850 gm, 1 Qty",
     "Aluminium 11 Idli Maker, Light Weight, 26x26x18 cm, 650 gm, 1 Qty",
@@ -1281,381 +984,469 @@
     "Wooden Half Stool, 25x25x25 cm,1235 gm, 1 Qty"
 ];
 
-    // --- 1. Theme Switch (Toggle) ---
-    const themeToggle = document.getElementById('themeToggle');
-    const themeLabel  = document.getElementById('themeLabel');
+let items = [];
+let editingId = null;
 
-    function applyTheme(mode) {
-        document.body.setAttribute('data-theme', mode);
-        themeToggle.checked = (mode === 'dark');
-        themeLabel.textContent = (mode === 'dark') ? 'Dark' : 'Light';
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+// ── SMALL HELPERS ──
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function num(n){ const v=+n; return isNaN(v)?'0':v.toLocaleString('en-IN'); }
+function el(id){ return document.getElementById(id); }
+
+const _MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const _MONFULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtDate(iso){
+  if(!iso) return '';
+  const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(!m) return String(iso);
+  return `${m[3]} ${_MON[+m[2]-1]} ${m[1]}`;
+}
+const _DOWK=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function weekday(iso){
+  const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? _DOWK[new Date(+m[1],+m[2]-1,+m[3]).getDay()] : '';
+}
+// LOGGED column: date on top, "Day, time" below — e.g. "31 Jul 2026" / "Fri, 09:03:53 AM".
+function loggedParts(e){
+  const main = e.date ? fmtDate(e.date) : String(e.dateRaw||'').trim();
+  if(!main) return {main:'', sub:''};
+  const dow = e.date ? weekday(e.date) : '';
+  const sub = e.time ? (dow ? `${dow}, ${e.time}` : e.time) : dow;
+  return {main, sub};
+}
+function loggedCell(e){ const p=loggedParts(e); if(!p.main) return '<span class="stk-zero">&mdash;</span>'; return `<div>${esc(p.main)}</div>${p.sub?`<div class="upd-sub">${esc(p.sub)}</div>`:''}`; }
+function loggedFull(e){ const p=loggedParts(e); return p.sub?`${p.main}, ${p.sub}`:p.main; }
+function loggedTs(e){
+  if(!e.date) return '';
+  let t='00:00:00';
+  if(e.time){ const m=String(e.time).match(/(\d{1,2}):(\d{2}):(\d{2})\s*([AaPp])[Mm]/); if(m){ let h=+m[1]%12; if(/p/i.test(m[4])) h+=12; t=`${String(h).padStart(2,'0')}:${m[2]}:${m[3]}`; } }
+  return e.date+' '+t;
+}
+function retDateCell(e){
+  if(e.returnDate) return esc(fmtDate(e.returnDate));
+  const raw=String(e.returnRaw||'').trim();
+  return raw ? esc(raw) : '<span class="stk-zero">&mdash;</span>';
+}
+function todayISO(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+// The month a return belongs to is the date it came back, falling back to the
+// date it was logged (older rows have no submission stamp at all).
+function entryMonth(e){ return String(e.returnDate || e.date || '').slice(0,7); }
+function isDamaged(e){ const c=String(e.condition||'').toLowerCase(); return c==='bad' || c.indexOf('damage')>=0; }
+function condPill(c){
+  const v=String(c||'').trim();
+  if(!v) return '<span class="stk-zero">&mdash;</span>';
+  const l=v.toLowerCase();
+  const cls = l==='good' ? 'in' : (l==='bad' ? 'out' : 'low');
+  return `<span class="pill ${cls}">${esc(v)}</span>`;
+}
+function platClass(p){
+  const l=String(p||'').toLowerCase();
+  if(l.indexOf('amazon')>=0) return 'amazon';
+  if(l.indexOf('flipkart')>=0) return 'flipkart';
+  if(l.indexOf('shopsy')>=0) return 'shopsy';
+  if(l.indexOf('meesho')>=0) return 'meesho';
+  if(l.indexOf('shopclues')>=0) return 'shopclues';
+  if(l.indexOf('ibi')>=0) return 'ibi';
+  return '';
+}
+function setStatus(online, msg){
+  el('statusDot').className = 'status-dot ' + (online ? 'online' : 'error');
+  el('statusTxt').textContent = msg;
+}
+function showToast(msg, type='success'){
+  const t = el('toast');
+  clearTimeout(t._t);
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  t._t = setTimeout(() => t.className = 'toast ' + type, 3200);
+}
+
+// ── THEME ──
+function applyTheme(mode){
+  const light = mode === 'light';
+  document.body.setAttribute('data-theme', light ? 'light' : 'dark');
+  el('themeToggle').checked = light;
+  el('themeLabel').textContent = light ? 'Light' : 'Dark';
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+}
+function toggleTheme(){
+  const next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+}
+
+// ── CLOCK ──
+function tickClock(){
+  const now=new Date();
+  const d=String(now.getDate()).padStart(2,'0'), mo=_MON[now.getMonth()], y=now.getFullYear();
+  const day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
+  let h=now.getHours(); const m=String(now.getMinutes()).padStart(2,'0'), s=String(now.getSeconds()).padStart(2,'0');
+  const ap=h>=12?'PM':'AM'; h=String((h%12)||12).padStart(2,'0');
+  el('liveClock').textContent = `${d} ${mo} ${y}, ${day} · ${h}:${m}:${s} ${ap}`;
+}
+
+// ── DRAWER / MODAL ──
+function openDrawer(){ el('drawer').classList.add('open'); el('drawerOverlay').classList.add('open'); }
+function closeDrawer(){ el('drawer').classList.remove('open'); el('drawerOverlay').classList.remove('open'); }
+function openBackend(){
+  el('fBackendUrl').value = (localStorage.getItem(URL_KEY) || '').trim();
+  el('backendModal').classList.add('open'); el('backendOverlay').classList.add('open');
+}
+function closeBackend(){ el('backendModal').classList.remove('open'); el('backendOverlay').classList.remove('open'); }
+function saveBackend(){
+  const url = el('fBackendUrl').value.trim();
+  try{ localStorage.setItem(URL_KEY, url); }catch(e){}
+  GAS_URL = url || DEFAULT_GAS_URL;
+  closeBackend();
+  showToast('Backend saved');
+  loadAll();
+}
+async function testBackend(){
+  const url = el('fBackendUrl').value.trim() || DEFAULT_GAS_URL;
+  showToast('Testing...');
+  try{
+    const r = await fetch(url+'?action=ping', {redirect:'follow'});
+    const j = await r.json();
+    if(j.status==='ok') showToast('✓ '+(j.message||'Backend is live!'));
+    else showToast('Reached, but: '+(j.message||'error'),'error');
+  }catch(e){ showToast('Could not reach that URL','error'); }
+}
+
+// ── GAS ──
+async function gasCall(params, retries=2, timeoutMs=25000){
+  if(!GAS_URL) throw new Error('No backend URL set');
+  const url = GAS_URL + '?' + new URLSearchParams(params).toString();
+  for(let attempt=1; attempt<=retries; attempt++){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(), timeoutMs);
+    try{
+      const r = await fetch(url, {redirect:'follow', signal:controller.signal});
+      const text = await r.text();
+      clearTimeout(timer);
+      try{ return JSON.parse(text); }
+      catch(e){ throw new Error('Bad JSON: '+text.slice(0,80)); }
+    }catch(e){
+      clearTimeout(timer);
+      if(attempt===retries) throw e;
+      await new Promise(r=>setTimeout(r, 1500*attempt));
     }
+  }
+}
+// POST (form-urlencoded, no CORS preflight) — a full customer address would
+// otherwise bloat the query string.
+async function gasPost(params, timeoutMs=40000){
+  if(!GAS_URL) throw new Error('No backend URL set');
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(), timeoutMs);
+  try{
+    const r = await fetch(GAS_URL, {method:'POST', redirect:'follow', signal:controller.signal,
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:new URLSearchParams(params).toString()});
+    const text = await r.text();
+    clearTimeout(timer);
+    try{ return JSON.parse(text); }
+    catch(e){ throw new Error('Bad JSON: '+text.slice(0,80)); }
+  }catch(e){ clearTimeout(timer); throw e; }
+}
 
-    themeToggle.addEventListener('change', () => {
-        const next = themeToggle.checked ? 'dark' : 'light';
-        applyTheme(next);
-        try { localStorage.setItem('ibi_returns_theme', next); } catch (e) {}
-    });
+// ── PRODUCT COMBO ──
+function buildProductList(){
+  const seen = new Set(), out = [];
+  PRODUCT_LIST.forEach(n => { const k=n.trim().toLowerCase(); if(n.trim() && !seen.has(k)){ seen.add(k); out.push(n.trim()); } });
+  items.forEach(e => { const n=String(e.product||'').trim(), k=n.toLowerCase(); if(n && !seen.has(k)){ seen.add(k); out.push(n); } });
+  out.sort((a,b)=>a.localeCompare(b));
+  el('productOptions').innerHTML = out.map(n=>`<option value="${esc(n)}"></option>`).join('');
+  window._PRODUCT_SET = new Set(out.map(n=>n.toLowerCase()));
+}
+function syncProduct(){
+  const v = el('fProduct').value.trim();
+  el('comboClear').classList.toggle('show', v.length>0);
+  const box = el('pickedBox');
+  if(!v){ box.classList.remove('show'); return; }
+  box.classList.add('show');
+  el('pickedName').textContent = v;
+  const known = window._PRODUCT_SET && window._PRODUCT_SET.has(v.toLowerCase());
+  const pill = el('pickedSrc');
+  pill.textContent = known ? 'Catalogue' : 'Custom';
+  pill.className = 'src-pill ' + (known ? 'list' : 'custom');
+}
+function clearProduct(){ el('fProduct').value=''; syncProduct(); el('fProduct').focus(); }
 
-    // --- 2. Page Init ---
-    document.addEventListener('DOMContentLoaded', () => {
-        // Version badge in the hero (top-left), from APP_VERSION constant
-        const vText = document.getElementById('versionTopText');
-        if (vText) vText.textContent = 'v' + APP_VERSION;
+// ── PLATFORM -> COURIER ──
+function syncCourier(platform){
+  const sel=el('fCourier'), lbl=el('courierLabel');
+  if(!platform){
+    sel.value=''; sel.classList.remove('auto-locked');
+    lbl.innerHTML='Courier';
+    return;
+  }
+  sel.value = PLATFORM_COURIER[platform] || '';
+  sel.classList.add('auto-locked');
+  lbl.innerHTML='Courier <span class="auto-badge"><i class="ti ti-bolt"></i> Auto</span>';
+}
 
-        // Restore saved theme
-        try {
-            const saved = localStorage.getItem('ibi_returns_theme');
-            applyTheme(saved === 'dark' ? 'dark' : 'light');
-        } catch (e) { applyTheme('light'); }
+// ── LOAD ──
+async function loadAll(){
+  el('loadingState').style.display='block';
+  el('emptyState').style.display='none';
+  setStatus(false, 'Loading...');
+  try{
+    const res = await gasCall({action:'getAll'});
+    if(res.status!=='ok') throw new Error(res.message||'Backend error');
+    items = res.items || [];
+    el('setupBanner').classList.remove('show');
+    setStatus(true, `Synced · ${items.length} returns`);
+    buildProductList();
+    buildPlatformFilter();
+    render();
+  }catch(e){
+    console.error(e);
+    setStatus(false, 'Offline — could not read the sheet');
+    // The most likely cause by far: the v4.0 Apps Script has not been deployed
+    // yet, so "getAll" is an unknown action and the response is an error page.
+    el('setupBannerTxt').textContent = 'Could not read the sheet. If you just updated the app, redeploy the Apps Script (Manage deployments → Edit → New version).';
+    el('setupBanner').classList.add('show');
+    buildProductList();
+    render();
+    showToast('Could not load returns','error');
+  }finally{
+    el('loadingState').style.display='none';
+  }
+}
 
-        setCurrentDateTime();
-        document.getElementById('returnDate').valueAsDate = new Date();
-        renderHistory();
-    });
+function buildPlatformFilter(){
+  const sel=el('filterPlatform'), prev=sel.value;
+  const names=[...new Set(items.map(e=>String(e.platform||'').trim()).filter(Boolean))].sort();
+  sel.innerHTML='<option value="all">All platforms</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  sel.value = names.indexOf(prev)>=0 ? prev : 'all';
+}
 
-    // --- 3. System Time Logic ---
-    function setCurrentDateTime() {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        document.getElementById('dateTime').value = now.toISOString().slice(0, 16);
+// ── FILTER / SORT ──
+function filtered(){
+  const plat=el('filterPlatform').value,
+        cond=el('filterCondition').value,
+        sort=el('filterSort').value,
+        q=el('filterSearch').value.toLowerCase().trim();
+  let list=items.filter(e=>{
+    if(plat!=='all' && String(e.platform||'').trim()!==plat) return false;
+    if(cond!=='all' && String(e.condition||'').trim().toLowerCase()!==cond.toLowerCase()) return false;
+    if(q && !`${e.orderId} ${e.product} ${e.address} ${e.platform} ${e.courier}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  list.sort((a,b)=>{
+    switch(sort){
+      case 'logged-asc':   return String(loggedTs(a)).localeCompare(String(loggedTs(b)));
+      case 'return-desc':  return String(b.returnDate||'').localeCompare(String(a.returnDate||''));
+      case 'added-desc':   return (b.row||0)-(a.row||0);
+      case 'platform-asc': return String(a.platform||'').localeCompare(String(b.platform||''));
+      case 'product-asc':  return String(a.product||'').localeCompare(String(b.product||''));
+      case 'logged-desc':
+      default: { const d=String(loggedTs(b)).localeCompare(String(loggedTs(a))); return d!==0?d:(b.row||0)-(a.row||0); }
     }
+  });
+  return list;
+}
 
-    // --- 3a. Platform → Courier Auto-Lock ---
-    const PLATFORM_COURIER_MAP = {
-        'Amazon':        'Amazon ATS',
-        'Amazon Bazaar': 'Amazon ATS',
-        'Flipkart':      'eKart',
-        'Shopsy':        'eKart',
-        'Meesho':        'Delhivery',
-        'ShopClues':     'Delhivery',
-        'IBI Website':   'Delhivery',
-    };
+function render(){
+  const list=filtered(), body=el('entryBody'), empty=el('emptyState');
 
-    const courierSelect = document.getElementById('courier');
-    const courierLabel  = document.querySelector('label[for="courier"]');
+  // headline metrics (always across ALL returns, not the filtered view)
+  const thisMonth=todayISO().slice(0,7);
+  const monthCt=items.filter(e=>entryMonth(e)===thisMonth).length;
+  const dmgCt=items.filter(isDamaged).length;
+  const td=todayISO();
+  const todayCt=items.filter(e=>e.date===td).length;
+  el('sumReturns').textContent=num(items.length);
+  el('sumMonth').textContent=num(monthCt);
+  el('sumMonthName').textContent=`${_MONFULL[+thisMonth.slice(5,7)-1]} ${thisMonth.slice(0,4)}`;
+  el('sumDamaged').textContent=num(dmgCt);
+  el('sumDamagedSub').textContent=items.length?`${Math.round(dmgCt/items.length*100)}% of returns`:'bad or slightly damaged';
+  el('sumToday').textContent=num(todayCt);
+  el('sumTodayDate').textContent=fmtDate(td);
+  el('countBadge').textContent=list.length;
 
-    function syncCourierToPlatform(platform) {
-        const allOptions = Array.from(courierSelect.options);
+  // filtered summary bar
+  const q=el('filterSearch').value.trim(), fPlat=el('filterPlatform').value, fCond=el('filterCondition').value;
+  const fsBox=el('filterSummary');
+  if(q||fPlat!=='all'||fCond!=='all'){
+    el('fsCount').textContent=list.length;
+    el('fsProducts').textContent=new Set(list.map(e=>String(e.product||'').trim().toLowerCase()).filter(Boolean)).size;
+    el('fsDamaged').textContent=list.filter(isDamaged).length;
+    const parts=[]; if(fPlat!=='all')parts.push(esc(fPlat)); if(fCond!=='all')parts.push(esc(fCond)); if(q)parts.push('&ldquo;'+esc(q)+'&rdquo;');
+    el('fsLabel').innerHTML='<i class="ti ti-filter"></i> '+parts.join(' &middot; ');
+    fsBox.style.display='flex';
+  } else fsBox.style.display='none';
 
-        if (!platform) {
-            // No platform selected — reset all options to enabled
-            allOptions.forEach(opt => {
-                if (opt.value) { opt.disabled = false; opt.style.opacity = ''; }
-            });
-            courierSelect.value = '';
-            courierSelect.classList.remove('auto-locked');
-            courierLabel.innerHTML = 'Courier Name';
-            return;
-        }
+  if(!list.length){ body.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  body.innerHTML=list.map((e,i)=>`
+    <tr class="${editingId===e.id?'row-editing':''}">
+      <td style="color:var(--text3)">${i+1}</td>
+      <td style="font-size:12px">${retDateCell(e)}</td>
+      <td>
+        <div class="plat ${platClass(e.platform)}">${esc(e.platform||'—')}</div>
+        ${e.courier?`<div class="sub-line">${esc(e.courier)}</div>`:''}
+      </td>
+      <td><span class="order-id">${esc(e.orderId||'—')}</span></td>
+      <td class="prod-cell"><div class="prod-name"><span title="${esc(e.product)}">${esc(e.product||'(unnamed)')}</span></div></td>
+      <td><div class="addr-cell" title="${esc(e.address)}">${esc(e.address||'—')}</div></td>
+      <td class="center">${condPill(e.condition)}</td>
+      <td style="font-size:12px;color:var(--text2)">${loggedCell(e)}</td>
+      <td><div class="action-cell">
+        <button class="action-btn copy" onclick="reuseEntry('${e.id}')" title="Re-use in the form"><i class="ti ti-copy"></i></button>
+        <button class="action-btn edit" onclick="startEdit('${e.id}')" title="Edit"><i class="ti ti-pencil"></i></button>
+        <button class="action-btn del"  onclick="deleteEntry('${e.id}')" title="Delete"><i class="ti ti-trash"></i></button>
+      </div></td>
+    </tr>`).join('');
+}
 
-        const target = PLATFORM_COURIER_MAP[platform] || 'Delhivery';
+// ── FORM <-> ENTRY ──
+function readForm(){
+  return {
+    platform:   el('fPlatform').value,
+    courier:    el('fCourier').value,
+    returnDate: el('fReturnDate').value,
+    orderId:    el('fOrderId').value.trim(),
+    product:    el('fProduct').value.trim(),
+    address:    el('fAddress').value.trim(),
+    condition:  el('fCondition').value
+  };
+}
+function fillForm(e){
+  el('fPlatform').value   = e.platform||'';
+  syncCourier(e.platform||'');
+  el('fCourier').value    = e.courier||'';
+  el('fReturnDate').value = e.returnDate||'';
+  el('fOrderId').value    = e.orderId||'';
+  el('fProduct').value    = e.product||'';
+  el('fAddress').value    = e.address||'';
+  el('fCondition').value  = e.condition||'';
+  syncProduct();
+}
+function clearForm(){
+  ['fPlatform','fCourier','fOrderId','fProduct','fAddress','fCondition'].forEach(id=>{ el(id).value=''; });
+  el('fReturnDate').value = todayISO();
+  syncCourier('');
+  syncProduct();
+}
+function exitEditMode(){
+  editingId=null;
+  el('formCard').classList.remove('editing');
+  el('editBanner').style.display='none';
+  el('formTitle').textContent='Log a Return';
+  el('btnSaveLabel').textContent='Save to Google Sheet';
+  el('btnSave').classList.remove('mode-edit');
+}
+function startEdit(id){
+  const e=items.find(x=>x.id===id);
+  if(!e) return;
+  editingId=id;
+  fillForm(e);
+  el('formCard').classList.add('editing');
+  el('editBanner').style.display='flex';
+  el('editName').textContent=e.orderId||e.product||'(no order id)';
+  el('formTitle').textContent='Edit Return';
+  el('btnSaveLabel').textContent='Update Return';
+  el('btnSave').classList.add('mode-edit');
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function cancelEdit(){
+  exitEditMode();
+  clearForm();
+  render();
+}
+// Copy an existing return into the form as a NEW entry (the old app's "tap to
+// reuse"), without touching the row it came from.
+function reuseEntry(id){
+  const e=items.find(x=>x.id===id);
+  if(!e) return;
+  exitEditMode();
+  fillForm(e);
+  el('fReturnDate').value = todayISO();
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+  showToast('Loaded into the form — edit and save as a new return');
+}
 
-        // Auto-select the correct courier
-        courierSelect.value = target;
+// ── SAVE ──
+async function saveEntry(){
+  const p = readForm();
+  if(!p.platform){ showToast('Select a platform','error'); el('fPlatform').focus(); return; }
+  if(!p.orderId){ showToast('Enter the order ID','error'); el('fOrderId').focus(); return; }
+  if(!p.product){ showToast('Enter a product name','error'); el('fProduct').focus(); return; }
+  if(!p.condition){ showToast('Select the package condition','error'); el('fCondition').focus(); return; }
 
-        // Dim all non-matching options, enable the matching one
-        allOptions.forEach(opt => {
-            if (!opt.value) return; // skip the blank placeholder
-            if (opt.value === target) {
-                opt.disabled = false;
-                opt.style.opacity = '';
-            } else {
-                opt.disabled = true;
-                opt.style.opacity = '0.35';
-            }
-        });
-
-        // Update the label with the AUTO badge
-        courierLabel.innerHTML = 'Courier Name <span class="auto-badge">⚡ Auto</span>';
-        courierSelect.classList.add('auto-locked');
+  const btn=el('btnSave'); btn.disabled=true;
+  const label=el('btnSaveLabel'), prev=label.textContent;
+  label.textContent = editingId ? 'Updating...' : 'Saving...';
+  try{
+    let res;
+    if(editingId){
+      res = await gasPost(Object.assign({action:'update', id:editingId}, p));
+    }else{
+      res = await gasPost(Object.assign({action:'add', nonce:String(Date.now())}, p));
     }
+    if(!res || res.status!=='ok') throw new Error(res && res.message ? res.message : 'Save failed');
+    showToast(editingId ? 'Return updated ✓' : 'Return logged ✓');
+    cancelEdit();
+    await loadAll();
+  }catch(e){
+    console.error(e);
+    showToast('Could not save — check the connection','error');
+  }finally{
+    btn.disabled=false;
+    label.textContent=prev;
+  }
+}
 
-    // Wire platform change to auto-sync courier
-    document.getElementById('platform').addEventListener('change', function () {
-        syncCourierToPlatform(this.value);
-    });
+// ── DELETE ──
+async function deleteEntry(id){
+  const e=items.find(x=>x.id===id);
+  if(!e) return;
+  if(!confirm(`Delete this return?\n\n${e.orderId||'(no order id)'}\n${e.product||''}\nLogged: ${loggedFull(e)||'—'}\n\nThis removes the row from the Google Sheet.`)) return;
+  try{
+    const res = await gasCall({action:'delete', id});
+    if(!res || res.status!=='ok') throw new Error(res && res.message ? res.message : 'Delete failed');
+    if(editingId===id) cancelEdit();
+    showToast('Deleted ✓');
+    await loadAll();
+  }catch(err){
+    console.error(err);
+    showToast('Could not delete — check the connection','error');
+  }
+}
 
-    // --- 4. Local Memory Logic ---
-    const HISTORY_KEY = 'ibi_returns_memory';
-    const MAX_HISTORY = 24;
+// ── CSV EXPORT ──
+function exportCSV(){
+  const list=filtered();
+  if(!list.length){ showToast('Nothing to export','error'); return; }
+  const head=['Submission Timestamp','Manual Return Date','Platform','Courier','Order ID','Product Name','From Address','Condition'];
+  const rows=list.map(e=>[loggedFull(e), (e.returnDate?fmtDate(e.returnDate):e.returnRaw), e.platform, e.courier,
+                          e.orderId, e.product, e.address, e.condition]);
+  const csv=[head].concat(rows)
+    .map(r=>r.map(v=>`"${String(v==null?'':v).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const blob=new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`IBI-Returns-${todayISO()}.csv`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  showToast(`Exported ${list.length} returns`);
+}
 
-    function escapeHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
-
-    function renderHistory() {
-        const list = document.getElementById('history-list');
-        const clearBtn = document.getElementById('clearBtn');
-        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-
-        if (history.length === 0) {
-            clearBtn.style.display = 'none';
-            list.innerHTML = '<div class="history-empty">No recent packages logged on this device yet.</div>';
-            return;
-        }
-
-        clearBtn.style.display = 'inline-flex';
-        list.innerHTML = '';
-
-        history.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.onclick = () => loadFromHistory(index);
-            div.innerHTML = `
-                <div class="history-item-top">
-                    <span class="order-id">📦 ${escapeHtml(item.orderId || '')}</span>
-                    <span class="history-item-date">🗓️ ${escapeHtml(item.returnDate || '')}</span>
-                </div>
-                <div class="history-details">
-                    <strong>Platform:</strong> ${escapeHtml(item.platform || '')} &nbsp;|&nbsp; <strong>Courier:</strong> ${escapeHtml(item.courier || '')}<br>
-                    <strong>Product:</strong> ${escapeHtml(item.productName || '')}<br>
-                    <strong>Condition:</strong> ${escapeHtml(item.condition || '')}
-                </div>
-                <div class="history-address">
-                    <strong>From:</strong> ${escapeHtml(item.address || '')}
-                </div>
-            `;
-            list.appendChild(div);
-        });
-    }
-
-    function saveToHistory(dataObj) {
-        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-        history.unshift(dataObj);
-        if (history.length > MAX_HISTORY) history.pop();
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-        renderHistory();
-    }
-
-    function loadFromHistory(index) {
-        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-        const item = history[index];
-        if (!item) return;
-
-        document.getElementById('platform').value = item.platform || '';
-        syncCourierToPlatform(item.platform || '');   // auto-lock courier for this platform
-        document.getElementById('returnDate').value = item.returnDate || '';
-        document.getElementById('orderId').value = item.orderId || '';
-        setProductFromHistory(item.productName || '');
-        document.getElementById('address').value = item.address || '';
-        document.getElementById('condition').value = item.condition || '';
-
-        setCurrentDateTime();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function clearHistory() {
-        if (confirm("Are you sure you want to clear all saved entries? This cannot be undone.")) {
-            localStorage.removeItem(HISTORY_KEY);
-            renderHistory();
-        }
-    }
-
-    // --- 5. Searchable Product Selector ---
-    const productSelector    = document.getElementById('productSelector');
-    const productSelectBtn   = document.getElementById('productSelectBtn');
-    const productSelectLabel = document.getElementById('productSelectLabel');
-    const productDropdown    = document.getElementById('productDropdown');
-    const productSearch      = document.getElementById('productSearch');
-    const productOptions     = document.getElementById('productOptions');
-    const productCustomWrap  = document.getElementById('productCustomWrap');
-    const productCustom      = document.getElementById('productCustom');
-    const productBackBtn     = document.getElementById('productBackBtn');
-    const productNameInput   = document.getElementById('productName');
-
-    function renderProductOptions(filter) {
-        const f = (filter || '').trim().toLowerCase();
-        const matched = f
-            ? PRODUCT_LIST.filter(p => p.toLowerCase().includes(f))
-            : PRODUCT_LIST.slice();
-
-        let html = '<div class="product-option other-option" data-value="__OTHER__" role="option">✏️ Other &mdash; Type Custom Product Name</div>';
-
-        if (matched.length === 0) {
-            html += '<div class="product-no-results">No matching products found.<br>Tap "Other" above to type a custom name.</div>';
-        } else {
-            html += matched.map(p => {
-                const idx = PRODUCT_LIST.indexOf(p) + 1;
-                return `<div class="product-option" data-value="${escapeHtml(p)}" role="option"><span class="opt-index">${idx}.</span><span class="opt-name">${escapeHtml(p)}</span></div>`;
-            }).join('');
-        }
-        productOptions.innerHTML = html;
-    }
-
-    function openProductDropdown() {
-        productSelector.classList.add('open');
-        productDropdown.hidden = false;
-        productSelectBtn.setAttribute('aria-expanded', 'true');
-        productSearch.value = '';
-        renderProductOptions('');
-        if (window.matchMedia('(min-width: 768px)').matches) {
-            setTimeout(() => productSearch.focus(), 50);
-        }
-    }
-
-    function closeProductDropdown() {
-        productSelector.classList.remove('open');
-        productDropdown.hidden = true;
-        productSelectBtn.setAttribute('aria-expanded', 'false');
-    }
-
-    function setSelectedProduct(name) {
-        productNameInput.value = name;
-        productSelectLabel.textContent = name;
-        productSelectLabel.classList.remove('placeholder');
-        productCustomWrap.hidden = true;
-        productSelectBtn.style.display = '';
-    }
-
-    function enterCustomMode(prefillValue) {
-        productCustomWrap.hidden = false;
-        productSelectBtn.style.display = 'none';
-        productCustom.value = prefillValue || '';
-        productNameInput.value = prefillValue || '';
-        closeProductDropdown();
-        setTimeout(() => productCustom.focus(), 50);
-    }
-
-    function resetProductField() {
-        productNameInput.value = '';
-        productSelectLabel.textContent = 'Select Product...';
-        productSelectLabel.classList.add('placeholder');
-        productCustomWrap.hidden = true;
-        productSelectBtn.style.display = '';
-        productCustom.value = '';
-        closeProductDropdown();
-    }
-
-    function setProductFromHistory(name) {
-        if (!name) { resetProductField(); return; }
-        if (PRODUCT_LIST.includes(name)) {
-            setSelectedProduct(name);
-        } else {
-            enterCustomMode(name);
-        }
-    }
-
-    productSelectBtn.addEventListener('click', () => {
-        if (productDropdown.hidden) openProductDropdown(); else closeProductDropdown();
-    });
-
-    productSearch.addEventListener('input', () => renderProductOptions(productSearch.value));
-    productSearch.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') { closeProductDropdown(); productSelectBtn.focus(); }
-    });
-
-    productOptions.addEventListener('click', (e) => {
-        const opt = e.target.closest('.product-option');
-        if (!opt) return;
-        const val = opt.dataset.value;
-        if (val === '__OTHER__') {
-            enterCustomMode('');
-        } else {
-            setSelectedProduct(val);
-            closeProductDropdown();
-        }
-    });
-
-    productCustom.addEventListener('input', () => {
-        productNameInput.value = productCustom.value;
-    });
-
-    productBackBtn.addEventListener('click', () => {
-        productCustomWrap.hidden = true;
-        productSelectBtn.style.display = '';
-        productNameInput.value = '';
-        productSelectLabel.textContent = 'Select Product...';
-        productSelectLabel.classList.add('placeholder');
-        openProductDropdown();
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!productSelector.contains(e.target)) closeProductDropdown();
-    });
-
-    // --- 6. Database Submission Logic ---
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyPW84MZnqZ7bxuuI4f7We7ymB4xW9zZZOpUdhm0Jv-rXd_hAEs-J_8B_MeHczafHDLTQ/exec';
-
-    const form = document.forms['return-form'];
-    const submitBtn = document.getElementById('submit-btn');
-    const statusMessage = document.getElementById('status-message');
-
-    function validateForm() {
-        // Native required check on visible inputs
-        const requiredEls = form.querySelectorAll('[required]');
-        for (const el of requiredEls) {
-            if (!el.value) {
-                el.focus();
-                statusMessage.innerText = 'PLEASE FILL ALL REQUIRED FIELDS.';
-                statusMessage.className = 'message error';
-                return false;
-            }
-        }
-        // Hidden productName check
-        if (!productNameInput.value.trim()) {
-            statusMessage.innerText = 'PLEASE SELECT OR TYPE A PRODUCT NAME.';
-            statusMessage.className = 'message error';
-            productSelectBtn.focus();
-            return false;
-        }
-        return true;
-    }
-
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-
-        if (!validateForm()) return;
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'SUBMITTING...';
-        statusMessage.className = 'message';
-        statusMessage.innerText = '';
-
-        const formData = new FormData(form);
-
-        fetch(scriptURL, { method: 'POST', body: formData })
-            .then(response => response.json())
-            .then(data => {
-                statusMessage.innerText = '✓ SUCCESS — PACKAGE LOGGED.';
-                statusMessage.className = 'message success';
-
-                const currentData = {
-                    platform: document.getElementById('platform').value,
-                    courier: document.getElementById('courier').value,
-                    returnDate: document.getElementById('returnDate').value,
-                    orderId: document.getElementById('orderId').value,
-                    productName: productNameInput.value,
-                    address: document.getElementById('address').value,
-                    condition: document.getElementById('condition').value
-                };
-                saveToHistory(currentData);
-
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Submit Return Data';
-                form.reset();
-                syncCourierToPlatform('');   // re-enable all courier options
-                resetProductField();
-                setCurrentDateTime();
-                document.getElementById('returnDate').valueAsDate = new Date();
-
-                setTimeout(() => { statusMessage.className = 'message'; }, 3500);
-            })
-            .catch(error => {
-                console.error('Error!', error);
-                statusMessage.innerText = '✗ ERROR SAVING DATA. PLEASE TRY AGAIN.';
-                statusMessage.className = 'message error';
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Submit Return Data';
-            });
-    });
+// ── INIT ──
+(function init(){
+  let saved='dark';
+  try{ saved = localStorage.getItem(THEME_KEY) || 'dark'; }catch(e){}
+  applyTheme(saved);
+  tickClock(); setInterval(tickClock, 1000);
+  el('fReturnDate').value = todayISO();
+  buildProductList();
+  loadAll();
+})();
 </script>
-
 </body>
 </html>

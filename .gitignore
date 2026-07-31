@@ -1,0 +1,4 @@
+﻿# Apps Script backends are LOCAL MIRRORS only.
+# GitHub Pages serves everything in this repo publicly — a .gs here would
+# expose the sheet ids and any code comments to the whole internet.
+*.gs
