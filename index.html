@@ -182,6 +182,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 
 input[type="date"]{cursor:pointer}
 input[type="date"]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:0.85}
 .auto-note{font-size:12px;color:var(--text2);background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--radius);padding:11px 12px;display:flex;align-items:center;gap:7px;line-height:1.3}
+/* Stock restock link — a Good return adds 1 back to IBI Stock Availability */
+.stk-panel{border:1px dashed var(--border2);border-radius:var(--radius);padding:10px 12px;background:var(--bg3)}
+.stk-panel.ok{border-style:solid;border-color:var(--success-border);background:var(--success-bg)}
+.stk-panel.warn{border-style:solid;border-color:var(--warning-border);background:var(--warning-bg)}
+.stk-line{font-size:12.5px;color:var(--text2);line-height:1.45;display:flex;align-items:flex-start;gap:7px}
+.stk-panel.ok .stk-line{color:var(--success-text)}
+.stk-panel.warn .stk-line{color:var(--warning-text)}
+.stk-panel select{margin-top:8px;font-size:13px}
 .auto-note i{color:var(--cyan);font-size:15px}
 .upd-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap}
 
@@ -423,7 +431,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v4.6</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v5.0</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -550,7 +558,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
         <label for="fProduct">Product Name <span class="hint">— pick from the catalogue or type a new one</span></label>
         <div class="combo-wrap">
           <input type="text" id="fProduct" list="productOptions" autocomplete="off" maxlength="220"
-                 placeholder="Type to search products, or type a new name…" oninput="syncProduct()" onchange="syncProduct()">
+                 placeholder="Type to search products, or type a new name…" oninput="syncProduct();stkOnFormChange()" onchange="syncProduct();stkOnFormChange()">
           <button type="button" class="combo-clear" id="comboClear" title="Clear" onclick="clearProduct()">&times;</button>
         </div>
         <datalist id="productOptions"></datalist>
@@ -567,12 +575,20 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 
       <div class="form-group">
         <label for="fCondition">Condition of Package</label>
-        <select id="fCondition">
+        <select id="fCondition" onchange="stkOnFormChange()">
           <option value="">Select condition…</option>
           <option>Good</option>
           <option>Bad</option>
           <option>Slight Damage</option>
         </select>
+      </div>
+
+      <div class="form-group full" id="stkWrap" style="display:none">
+        <label>Back to Stock <span class="hint">— a Good return adds 1 to Loose on IBI Stock Availability</span></label>
+        <div class="stk-panel" id="stkPanel">
+          <div class="stk-line" id="stkLine">Checking the stock register…</div>
+          <select id="stkSelect" style="display:none" onchange="stkPicked()"></select>
+        </div>
       </div>
     </div>
 
@@ -765,7 +781,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '4.6';
+const APP_VERSION = '5.0';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -1445,12 +1461,16 @@ function fillForm(e){
   el('fAddress').value    = e.address||'';
   el('fCondition').value  = e.condition||'';
   syncProduct();
+  // Setting .value in code fires NO events (the same trap Order Processing's
+  // v13.1 fixed) — ask the stock link to re-look explicitly.
+  stkOnFormChange();
 }
 function clearForm(){
   ['fPlatform','fCourier','fOrderId','fProduct','fAddress','fCondition'].forEach(id=>{ el(id).value=''; });
   el('fReturnDate').value = todayISO();
   syncCourier('');
   syncProduct();
+  stk.id=''; clearTimeout(stk.timer); el('stkWrap').style.display='none';
 }
 function exitEditMode(){
   editingId=null;
@@ -1492,6 +1512,105 @@ function reuseEntry(id){
   showToast('Loaded into the form — edit and save as a new return');
 }
 
+// ── STOCK RESTOCK LINK ──
+// The mirror of Order Processing's deduction panel: Condition = Good asks the
+// backend which stock shelf the unit goes back to. Ask once per product name,
+// remembered in the SAME _StockMap the order flow uses — each app learns from
+// the other's confirmations. An old backend (stockSuggest not deployed yet)
+// answers with a small error JSON; the panel then hides itself and saving
+// behaves exactly as v4.x, so frontend and backend can go live in any order.
+let stk = { enabled:null, id:'', options:[], list:[], seq:0, timer:null };
+
+function stkOnFormChange(){
+  clearTimeout(stk.timer);
+  stk.timer = setTimeout(stkLookup, 500);
+}
+// When editing a row that already put its unit on the shelf, show what it did
+// and offer no picker — one return restocks at most once.
+function stkEditingRestocked(){
+  if(!editingId) return '';
+  const e = items.find(x=>x.id===editingId);
+  return (e && (e.stockNote||'').charAt(0)==='+') ? e.stockNote : '';
+}
+
+async function stkLookup(){
+  const name = el('fProduct').value.trim();
+  const good = el('fCondition').value === 'Good';
+  const wrap = el('stkWrap');
+  if(stk.enabled === false || !good || !name){ stk.id=''; wrap.style.display='none'; return; }
+
+  const done = stkEditingRestocked();
+  if(done){
+    stk.id='';
+    wrap.style.display='';
+    stkRender('ok', 'Already restocked: ' + done.replace(/\s*\[[^\]]*\]/,''), false);
+    return;
+  }
+
+  wrap.style.display='';
+  stkRender('', 'Checking the stock register…', false);
+  const seq = ++stk.seq;
+  let res = null;
+  try{ res = await gasCall({action:'stockSuggest', productName:name}, 1, 20000); }catch(e){}
+  if(seq !== stk.seq) return;                    // a newer lookup superseded this one
+  if(!res || res.ok !== true){
+    if(res && res.status === 'error') stk.enabled = false;   // old backend — feature not deployed
+    stk.id='';
+    wrap.style.display='none';
+    return;
+  }
+  stk.enabled = true;
+  stk.options = res.options || [];
+  stk.list    = res.list || [];
+  const choice = res.choice || null;
+  stk.id = choice ? choice.id : '';
+  stkBuildSelect(stk.id);
+  if(res.source === 'remembered'){
+    stkRender('ok', '+1 will go to: ' + choice.product + '  (Packed ' + choice.packed + ' · Loose ' + choice.loose + ') — remembered for this product.', true);
+  }else if(res.source === 'guess'){
+    stkRender('ok', '+1 will go to the selected shelf. Change it if the guess is wrong — your answer is remembered.', true);
+  }else{
+    stkRender('warn', 'Pick the shelf this unit goes back to — asked once, then remembered for this product name.', true);
+  }
+}
+
+function stkBuildSelect(selectedId){
+  const sel = el('stkSelect');
+  sel.innerHTML = '';
+  const none = document.createElement('option');
+  none.value=''; none.textContent="— Don't add to stock —";
+  sel.appendChild(none);
+  const seen = {};
+  if(stk.options.length){
+    const g = document.createElement('optgroup'); g.label='Best matches';
+    stk.options.forEach(o=>{ seen[o.id]=1; g.appendChild(stkOption(o)); });
+    sel.appendChild(g);
+  }
+  const rest = stk.list.filter(o=>!seen[o.id]).sort((a,b)=>a.product.localeCompare(b.product));
+  if(rest.length){
+    const g2 = document.createElement('optgroup'); g2.label='All stock items';
+    rest.forEach(o=>g2.appendChild(stkOption(o)));
+    sel.appendChild(g2);
+  }
+  sel.value = selectedId || '';
+}
+function stkOption(o){
+  const op = document.createElement('option');
+  op.value = o.id;
+  op.textContent = o.product + '  (P ' + o.packed + ' · L ' + o.loose + ')';
+  return op;
+}
+function stkPicked(){
+  stk.id = el('stkSelect').value;
+  if(stk.id) stkRender('ok', '+1 will go to the selected shelf when you save.', true);
+  else       stkRender('warn', 'No shelf selected — saving will NOT add the unit back to stock.', true);
+}
+function stkRender(mood, text, withSelect){
+  el('stkPanel').className = 'stk-panel' + (mood ? ' ' + mood : '');
+  el('stkLine').textContent = text;
+  el('stkSelect').style.display = withSelect ? '' : 'none';
+}
+
 // ── SAVE ──
 async function saveEntry(){
   const p = readForm();
@@ -1499,6 +1618,16 @@ async function saveEntry(){
   if(!p.orderId){ showToast('Enter the order ID','error'); el('fOrderId').focus(); return; }
   if(!p.product){ showToast('Enter a product name','error'); el('fProduct').focus(); return; }
   if(!p.condition){ showToast('Select the package condition','error'); el('fCondition').focus(); return; }
+
+  // A Good return should put its unit back on the shelf. Saving without a
+  // shelf is allowed — some returns are not stock items — but never silently.
+  const goodReturn = p.condition === 'Good' && stk.enabled === true && !stkEditingRestocked();
+  if(goodReturn && el('stkWrap').style.display !== 'none' && !stk.id){
+    if(!confirm('No stock shelf is selected — save WITHOUT adding this unit back to IBI Stock Availability?\n\nCancel to pick the shelf.')){
+      el('stkSelect').focus(); return;
+    }
+  }
+  if(goodReturn && stk.id) p.stockId = stk.id;
 
   const btn=el('btnSave'); btn.disabled=true;
   const label=el('btnSaveLabel'), prev=label.textContent;
@@ -1511,7 +1640,17 @@ async function saveEntry(){
       res = await gasPost(Object.assign({action:'add', nonce:String(Date.now())}, p));
     }
     if(!res || res.status!=='ok') throw new Error(res && res.message ? res.message : 'Save failed');
-    showToast(editingId ? 'Return updated ✓' : 'Return logged ✓');
+    // The stock outcome is the toast worth reading; the plain confirmation
+    // only shows when the stock link had nothing to do.
+    const st = res.stock;
+    if(st && st.attempted){
+      if(st.ok && st.reversed)      showToast('Updated ✓  Stock reversed −1 → ' + st.product + '  (' + st.before + ' → ' + st.after + ')');
+      else if(st.ok)                showToast('Saved ✓  +1 → ' + st.product + '  (' + st.before + ' → ' + st.after + ')');
+      else if(st.reason==='unmapped') showToast('Saved, but NOT restocked — no stock shelf chosen','error');
+      else                          showToast('Saved, but the stock update failed: ' + (st.reason||'unknown'),'error');
+    }else{
+      showToast(editingId ? 'Return updated ✓' : 'Return logged ✓');
+    }
     cancelEdit();
     await loadAll();
   }catch(e){
