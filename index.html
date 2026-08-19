@@ -781,7 +781,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '5.2';
+const APP_VERSION = '6.0';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -1540,6 +1540,34 @@ function reuseEntry(id){
 // behaves exactly as v4.x, so frontend and backend can go live in any order.
 let stk = { enabled:null, id:'', options:[], list:[], seq:0, timer:null };
 
+/* ── pack size, read exactly as the backend reads it ───────────────────────
+   A returned 2 Qty pack goes back on the 2 Qty shelf. Of the only two restocks this
+   app had ever done, BOTH landed on the wrong shelf (a 1 Qty Chappal Stitching Tool
+   added to the 2 Qty row; a Brown bath towel added to the Yellow row) — the dropdown
+   listed near-identical names with nothing to tell them apart.
+   ⚠ Keep in step with _opPackSize_ in the .gs and stkPack in Order Processing. */
+const STK_JUNK_SEG = /(^|\s)(sku|asin|hsn|ean|upc|fnsku)\s*:|\bB0[A-Z0-9]{8}\b|^(?=[^\s]*\d)[A-Z0-9][A-Z0-9\-_]{7,}$/i;
+function stkNorm(s){
+  const segs = String(s==null?'':s).split('|'), keep=[];
+  for(const seg0 of segs){ const seg=seg0.trim(); if(seg && !STK_JUNK_SEG.test(seg)) keep.push(seg); }
+  return (keep.length ? keep.join(' ') : segs[0])
+    .replace(/\bSKU\s*:.*$/i,'').replace(/\bHSN\s*:\s*\d+/i,'')
+    .toLowerCase().replace(/×/g,'x').replace(/[^\w.\s]/g,' ').replace(/\s+/g,' ').trim();
+}
+function stkPack(name){
+  const n = stkNorm(name); let m;
+  if((m = n.match(/\b(\d+)\s*qty\b/)))               return parseInt(m[1],10)||1;
+  if((m = n.match(/\b(?:pack|set)\s+of\s+(\d+)\b/))) return parseInt(m[1],10)||1;
+  if((m = n.match(/\b(\d+)\s*(?:pieces|pcs)\b/)))    return parseInt(m[1],10)||1;
+  return 1;   // nothing stated = a single unit
+}
+/** The pack size of the product being returned. */
+function stkReturnPack(){ return stkPack(el('fProduct').value || ''); }
+/** The shelf currently selected, out of whichever list holds it. */
+function stkRowById(id){
+  return (stk.list || []).find(o=>o.id===id) || (stk.options || []).find(o=>o.id===id) || null;
+}
+
 function stkOnFormChange(){
   clearTimeout(stk.timer);
   stk.timer = setTimeout(stkLookup, 500);
@@ -1582,9 +1610,20 @@ async function stkLookup(){
   stk.options = res.options || [];
   stk.list    = res.list || [];
   const choice = res.choice || null;
-  stk.id = choice ? choice.id : '';
+  /* ⚠ A remembered answer is normally accepted in silence — which is how one wrong
+     pick became permanent on the order side. This app SHARES that _StockMap, so it
+     inherited the wrong links too. Never arm a shelf whose pack disagrees, however
+     confident the backend sounds: identity outranks memory. */
+  const want = stkReturnPack();
+  const choicePack = choice ? stkPack(choice.product) : want;
+  const packBad = !!choice && choicePack !== want;
+  stk.id = (choice && !packBad) ? choice.id : '';
   stkBuildSelect(stk.id);
-  if(res.source === 'remembered'){
+  if(packBad){
+    stkRender('warn', 'Wrong pack — nothing will be added. This return is a ' + want +
+      ' Qty pack but the remembered shelf "' + choice.product + '" is a ' + choicePack +
+      ' Qty pack. Pick the ' + want + ' Qty shelf below.', true);
+  }else if(res.source === 'remembered'){
     stkRender('ok', '+1 will go to: ' + choice.product + '  (Packed ' + choice.packed + ' · Loose ' + choice.loose + ') — remembered for this product.', true);
   }else if(res.source === 'guess'){
     stkRender('ok', '+1 will go to the selected shelf. Change it if the guess is wrong — your answer is remembered.', true);
@@ -1616,13 +1655,25 @@ function stkBuildSelect(selectedId){
 function stkOption(o){
   const op = document.createElement('option');
   op.value = o.id;
-  op.textContent = o.product + '  (P ' + o.packed + ' · L ' + o.loose + ')';
+  // The pack size gets its own leading marker so the eye does not have to hunt for
+  // "1Qty" versus "2 Qty" at the end of two otherwise identical lines.
+  const pk = stkPack(o.product), bad = pk !== stkReturnPack();
+  op.textContent = (bad ? '≠ ' : '') + '×' + pk + '  ' + o.product +
+                   '  (P ' + o.packed + ' · L ' + o.loose + ')';
   return op;
 }
 function stkPicked(){
   stk.id = el('stkSelect').value;
-  if(stk.id) stkRender('ok', '+1 will go to the selected shelf when you save.', true);
-  else       stkRender('warn', 'No shelf selected — saving will NOT add the unit back to stock.', true);
+  if(!stk.id){ stkRender('warn', 'No shelf selected — saving will NOT add the unit back to stock.', true); return; }
+  const row = stkRowById(stk.id), want = stkReturnPack();
+  const got = row ? stkPack(row.product) : want;
+  if(got !== want){
+    stkRender('warn', 'Wrong pack — nothing will be added. This return is a ' + want +
+      ' Qty pack but "' + row.product + '" is a ' + got + ' Qty pack. Pick the ' +
+      want + ' Qty shelf instead.', true);
+    return;
+  }
+  stkRender('ok', '+1 will go to the selected shelf when you save.', true);
 }
 function stkRender(mood, text, withSelect){
   el('stkPanel').className = 'stk-panel' + (mood ? ' ' + mood : '');
@@ -1644,6 +1695,17 @@ async function saveEntry(){
   if(goodReturn && el('stkWrap').style.display !== 'none' && !stk.id){
     if(!confirm('No stock shelf is selected — save WITHOUT adding this unit back to IBI Stock Availability?\n\nCancel to pick the shelf.')){
       el('stkSelect').focus(); return;
+    }
+  }
+  // Pack guard, same as Order Processing's: the right product in the wrong pack is
+  // the failure that actually happened here, twice out of two.
+  if(goodReturn && stk.id){
+    const row = stkRowById(stk.id), want = stkReturnPack();
+    const got = row ? stkPack(row.product) : want;
+    if(got !== want){
+      if(!confirm('WRONG PACK — STOCK WILL NOT BE ADDED\n\nThis return is a '+want+' Qty pack.\nThe selected shelf "'+row.product+'" is a '+got+' Qty pack.\n\nThey are different products, so nothing will be added to either shelf.\n\nCancel to pick the '+want+' Qty shelf.\n\nSave without adding to stock?')){
+        el('stkSelect').focus(); return;
+      }
     }
   }
   if(goodReturn && stk.id) p.stockId = stk.id;
