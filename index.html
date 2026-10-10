@@ -195,6 +195,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:0.8
 .stk-panel.ok .stk-line{color:var(--success-text)}
 .stk-panel.warn .stk-line{color:var(--warning-text)}
 .stk-panel select{margin-top:8px;font-size:13px}
+/* v6.3 combo lines */
+.stk-add{margin-top:9px;width:100%;min-height:38px;padding:7px 12px;background:transparent;color:var(--cyan);border:1px dashed var(--cyan);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.stk-ln{margin-top:8px;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--bg2)}
+.stk-ln b{font-size:13px;color:var(--text)}
+.stk-ln .pk{font-size:12px;padding:1px 7px;border-radius:999px;color:var(--cyan);border:1px solid var(--cyan);white-space:nowrap}
+.stk-ln .row{margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--text2)}
+.stk-ln button{min-width:36px;height:36px;padding:0 10px;background:transparent;color:var(--cyan);border:1px solid var(--border2);border-radius:6px;font-size:16px;font-weight:800;cursor:pointer}
+.stk-ln button.rm{margin-left:auto;font-size:12.5px;color:var(--danger-text)}
+.stk-ln .out{color:var(--danger-text);font-weight:700}
 .auto-note i{color:var(--cyan);font-size:15px}
 .upd-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap}
 
@@ -394,7 +403,10 @@ tr.row-editing td{background:var(--info-bg) !important}
 .src-pill.custom{background:var(--warning-bg);color:var(--warning-text)}
 .picked{display:none;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--text2);flex-wrap:wrap}
 .picked.show{display:flex}
-.picked .picked-name{color:var(--text);font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picked .picked-name{color:var(--text);font-weight:600;max-width:100%;overflow-wrap:anywhere;white-space:normal}
+/* v6.3: a grid item's default min-width is its content — one long marketplace title
+   stretched the whole form to ~815px on a 375px phone. Fields may shrink; text wraps. */
+.form-group{min-width:0}
 .auto-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;background:var(--info-bg);color:var(--info-text);text-transform:uppercase;letter-spacing:0.04em;margin-left:6px}
 select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 .plat{font-weight:600;white-space:nowrap}
@@ -436,7 +448,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.2</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.3</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -593,6 +605,10 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
         <div class="stk-panel" id="stkPanel">
           <div class="stk-line" id="stkLine">Checking the stock register…</div>
           <select id="stkSelect" style="display:none" onchange="stkPicked()"></select>
+          <!-- v6.3: a combo return — every piece listed with how many go back -->
+          <div id="stkLines"></div>
+          <button type="button" class="stk-add" id="stkAddBtn" style="display:none" onclick="stkAddItem()">＋ Add another item (combo / 2 products in this return)</button>
+          <select id="stkAddSelect" style="display:none" onchange="stkAddPicked()"></select>
         </div>
       </div>
     </div>
@@ -663,7 +679,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.2 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.3 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -682,7 +698,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.2 &mdash; September 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.3 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -786,7 +802,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.2';
+const APP_VERSION = '6.3';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -1529,7 +1545,9 @@ function clearForm(){
   el('fReturnDate').value = todayISO();
   syncCourier('');
   syncProduct();
-  stk.id=''; clearTimeout(stk.timer); el('stkWrap').style.display='none';
+  stk.id=''; stk.extra=[]; stk.mainQty=1; stk.mainPer=1; stk.touched=false;
+  clearTimeout(stk.timer); el('stkWrap').style.display='none';
+  el('stkLines').innerHTML=''; el('stkAddSelect').style.display='none';
 }
 function exitEditMode(){
   editingId=null;
@@ -1578,7 +1596,78 @@ function reuseEntry(id){
 // the other's confirmations. An old backend (stockSuggest not deployed yet)
 // answers with a small error JSON; the panel then hides itself and saving
 // behaves exactly as v4.x, so frontend and backend can go live in any order.
-let stk = { enabled:null, id:'', options:[], list:[], seq:0, timer:null };
+let stk = { enabled:null, id:'', options:[], list:[], seq:0, timer:null,
+            source:'', extra:[], mainQty:1, mainPer:1, touched:false };
+
+/* ── v6.3: COMBO RETURNS ───────────────────────────────────────────────────
+   A combo listing (Flipkart "Hydro crystal-104&106" = Black + Navy Blue) is one
+   order line holding several pieces. Order Processing v15.2 deducts every piece
+   and remembers the combo; a return of it must put every piece BACK. The
+   standard return check is per item: each line says how many go back to stock,
+   and 0 keeps a piece out (it came back damaged or missing) without changing
+   what the combo is. Line 1 = the shelf in the dropdown; stk.extra = lines 2…,
+   each {row, per (how many one combo holds), qty (how many go back now)}. */
+function stkIsCombo(){ return !!stk.id && stk.extra.length > 0; }
+function stkLinesAll(){
+  if(!stk.id) return [];
+  const r1 = stkRowById(stk.id);
+  return r1 ? [{row:r1, per:stk.mainPer, qty:stk.mainQty}].concat(stk.extra) : stk.extra.slice();
+}
+function stkComboPieces(){ return stkLinesAll().reduce((s,l)=>s + stkPack(l.row.product)*l.per, 0); }
+function stkComboPackOk(){ const w = stkReturnPack(); return w <= 1 || stkComboPieces() === w; }
+function stkAddItem(){
+  const sel = el('stkAddSelect');
+  stkBuildSelect('', sel, true);
+  sel.style.display = '';
+  sel.focus();
+}
+function stkAddPicked(){
+  const sel = el('stkAddSelect'), id = sel.value;
+  sel.style.display = 'none';
+  if(!id) return;
+  if(stkLinesAll().some(l=>l.row.id===id)){ showToast('That item is already in this return — use + on its line','error'); return; }
+  const row = stkRowById(id); if(!row) return;
+  stk.extra.push({row, per:1, qty:1}); stk.touched = true;
+  stkRenderLines();
+}
+function stkLineQty(i, d){
+  if(i===0) stk.mainQty = Math.max(0, stk.mainQty + d);
+  else if(stk.extra[i-1]) stk.extra[i-1].qty = Math.max(0, stk.extra[i-1].qty + d);
+  stkRenderLines();
+}
+function stkRemoveLine(i){
+  if(i===0){
+    const nx = stk.extra.shift();
+    stk.id = nx ? nx.row.id : ''; stk.mainQty = nx ? nx.qty : 1; stk.mainPer = nx ? nx.per : 1;
+    el('stkSelect').value = stk.id;
+  }else stk.extra.splice(i-1,1);
+  if(!stk.extra.length){ stk.mainQty = 1; stk.mainPer = 1; }
+  stk.touched = true;
+  stkRenderLines();
+}
+function stkRenderLines(){
+  const host = el('stkLines'), add = el('stkAddBtn');
+  if(!host) return;
+  const visible = el('stkSelect').style.display !== 'none';
+  add.style.display = (visible && stk.id) ? '' : 'none';
+  if(!stkIsCombo()){ host.innerHTML=''; return; }
+  const lines = stkLinesAll();
+  host.innerHTML = '<div style="margin-top:9px;font-size:12.5px;font-weight:800;color:var(--cyan)">COMBO — ' + lines.length +
+    ' items in this return · set 0 for a piece that came back damaged or missing</div>' +
+    lines.map((l,i)=>'<div class="stk-ln"><b>' + (i+1) + '. ' + esc(l.row.product) + '</b> <span class="pk">×' + stkPack(l.row.product) + ' pack</span>' +
+      '<div class="row">Back to stock' +
+        '<button type="button" aria-label="One less" onclick="stkLineQty('+i+',-1)">−</button>' +
+        '<b style="min-width:18px;text-align:center">' + l.qty + '</b>' +
+        '<button type="button" aria-label="One more" onclick="stkLineQty('+i+',1)">+</button>' +
+        (l.qty===0 ? '<span class="out">kept out</span>' : '<span>Loose ' + l.row.loose + ' → ' + (l.row.loose + l.qty) + '</span>') +
+        '<button type="button" class="rm" onclick="stkRemoveLine('+i+')">✕ Remove</button>' +
+      '</div></div>').join('') +
+    (stkComboPackOk() ? '' : '<div class="stk-line" style="margin-top:8px;color:var(--danger-text);font-weight:700">⚠ This listing is a ' + stkReturnPack() + ' Qty pack but the combo has ' + stkComboPieces() + ' pieces — nothing will be added.</div>');
+  const backN = lines.reduce((s,l)=>s+l.qty,0);
+  stkRender(backN ? 'ok' : 'warn', backN
+    ? 'Combo: ' + backN + (backN===1 ? ' piece goes' : ' pieces go') + ' back to Loose when you save' + (stk.source==='remembered' && !stk.touched ? ' — remembered for this product.' : '.')
+    : 'Every piece is set to 0 — nothing will be added back to stock.', true);
+}
 
 /* ── pack size, read exactly as the backend reads it ───────────────────────
    A returned 2 Qty pack goes back on the 2 Qty shelf. Of the only two restocks this
@@ -1630,7 +1719,8 @@ async function stkLookup(){
   if(done){
     stk.id='';
     wrap.style.display='';
-    stkRender('ok', 'Already restocked: ' + done.replace(/\s*\[[^\]]*\]/,''), false);
+    stkRender('ok', 'Already restocked: ' + done.replace(/\s*\[[^\]]*\]/g,''), false);
+    el('stkLines').innerHTML=''; el('stkAddBtn').style.display='none';
     return;
   }
 
@@ -1649,7 +1739,19 @@ async function stkLookup(){
   stk.enabled = true;
   stk.options = res.options || [];
   stk.list    = res.list || [];
+  stk.source  = res.source || '';
+  stk.extra = []; stk.mainQty = 1; stk.mainPer = 1; stk.touched = false;
   const choice = res.choice || null;
+  // v6.3: a remembered combo comes back as `lines` — every piece goes back.
+  if(res.lines && res.lines.length >= 2){
+    stk.id = res.lines[0].id;
+    stk.mainPer = stk.mainQty = Math.max(1, parseInt(res.lines[0].qty,10)||1);
+    stk.extra = res.lines.slice(1).map(l=>({row:l, per:Math.max(1,parseInt(l.qty,10)||1), qty:Math.max(1,parseInt(l.qty,10)||1)}));
+    stkBuildSelect(stk.id);
+    stkRender('ok', '', true);
+    stkRenderLines();
+    return;
+  }
   /* ⚠ A remembered answer is normally accepted in silence — which is how one wrong
      pick became permanent on the order side. This app SHARES that _StockMap, so it
      inherited the wrong links too. Never arm a shelf whose pack disagrees, however
@@ -1670,50 +1772,56 @@ async function stkLookup(){
   }else{
     stkRender('warn', 'Pick the shelf this unit goes back to — asked once, then remembered for this product name.', true);
   }
+  stkRenderLines();
 }
 
-function stkBuildSelect(selectedId){
-  const sel = el('stkSelect');
+function stkBuildSelect(selectedId, target, adding){
+  const sel = target || el('stkSelect');
   sel.innerHTML = '';
   const none = document.createElement('option');
-  none.value=''; none.textContent="— Don't add to stock —";
+  none.value=''; none.textContent = adding ? '— Pick the next item of this combo —' : "— Don't add to stock —";
   sel.appendChild(none);
   const seen = {};
   if(stk.options.length){
     const g = document.createElement('optgroup'); g.label='Best matches';
-    stk.options.forEach(o=>{ seen[o.id]=1; g.appendChild(stkOption(o)); });
+    stk.options.forEach(o=>{ seen[o.id]=1; g.appendChild(stkOption(o, adding)); });
     sel.appendChild(g);
   }
   const rest = stk.list.filter(o=>!seen[o.id]).sort((a,b)=>a.product.localeCompare(b.product));
   if(rest.length){
     const g2 = document.createElement('optgroup'); g2.label='All stock items';
-    rest.forEach(o=>g2.appendChild(stkOption(o)));
+    rest.forEach(o=>g2.appendChild(stkOption(o, adding)));
     sel.appendChild(g2);
   }
   sel.value = selectedId || '';
 }
-function stkOption(o){
+function stkOption(o, adding){
   const op = document.createElement('option');
   op.value = o.id;
   // The pack size gets its own leading marker so the eye does not have to hunt for
   // "1Qty" versus "2 Qty" at the end of two otherwise identical lines.
-  const pk = stkPack(o.product), bad = pk !== stkReturnPack();
+  // v6.3: in a combo each piece is its own product — no ≠ against the listing's pack.
+  const pk = stkPack(o.product), bad = !adding && !stkIsCombo() && pk !== stkReturnPack();
   op.textContent = (bad ? '≠ ' : '') + '×' + pk + '  ' + o.product +
                    '  (P ' + o.packed + ' · L ' + o.loose + ')';
   return op;
 }
 function stkPicked(){
   stk.id = el('stkSelect').value;
-  if(!stk.id){ stkRender('warn', 'No shelf selected — saving will NOT add the unit back to stock.', true); return; }
+  stk.touched = true;
+  if(!stk.id){ stk.extra = []; stkRenderLines(); stkRender('warn', 'No shelf selected — saving will NOT add the unit back to stock.', true); return; }
+  if(stkIsCombo()){ stkRenderLines(); return; }
   const row = stkRowById(stk.id), want = stkReturnPack();
   const got = row ? stkPack(row.product) : want;
   if(got !== want){
     stkRender('warn', 'Wrong pack — nothing will be added. This return is a ' + want +
       ' Qty pack but "' + row.product + '" is a ' + got + ' Qty pack. Pick the ' +
-      want + ' Qty shelf instead.', true);
+      want + ' Qty shelf instead — or, if this listing is a COMBO of different products, tap ＋ Add another item.', true);
+    stkRenderLines();                                // v6.3: keeps the ＋ Add button reachable
     return;
   }
   stkRender('ok', '+1 will go to the selected shelf when you save.', true);
+  stkRenderLines();
 }
 function stkRender(mood, text, withSelect){
   el('stkPanel').className = 'stk-panel' + (mood ? ' ' + mood : '');
@@ -1739,7 +1847,11 @@ async function saveEntry(){
   }
   // Pack guard, same as Order Processing's: the right product in the wrong pack is
   // the failure that actually happened here, twice out of two.
-  if(goodReturn && stk.id){
+  // v6.3: a combo is checked as a whole — its pieces must add up to the listing's pack.
+  if(goodReturn && stkIsCombo() && !stkComboPackOk()){
+    if(!confirm('COMBO DOES NOT ADD UP — STOCK WILL NOT BE ADDED\n\nThis listing is a '+stkReturnPack()+' Qty pack.\nThe combo has '+stkComboPieces()+' pieces.\n\nCancel to fix the items.\n\nSave without adding to stock?')) return;
+  }
+  if(goodReturn && stk.id && !stkIsCombo()){
     const row = stkRowById(stk.id), want = stkReturnPack();
     const got = row ? stkPack(row.product) : want;
     if(got !== want){
@@ -1749,6 +1861,11 @@ async function saveEntry(){
     }
   }
   if(goodReturn && stk.id) p.stockId = stk.id;
+  if(goodReturn && stkIsCombo()){
+    p.stockLines = JSON.stringify(stkLinesAll().map(l=>({id:l.row.id, qty:l.qty, per:l.per})));
+    // Remember only a combo a person built or changed here; a remembered one stays as it is.
+    if(stk.touched || stk.source !== 'remembered') p.rememberCombo = '1';
+  }
 
   const btn=el('btnSave'); btn.disabled=true;
   const label=el('btnSaveLabel'), prev=label.textContent;
@@ -1764,7 +1881,14 @@ async function saveEntry(){
     // The stock outcome is the toast worth reading; the plain confirmation
     // only shows when the stock link had nothing to do.
     const st = res.stock;
-    if(st && st.attempted){
+    if(st && st.attempted && st.lines && st.lines.length > 1){
+      // v6.3: a combo — say what happened to every piece.
+      const back = st.lines.filter(l=>l.ok && !l.kept && !st.reversed).length;
+      if(st.reversed) showToast('Updated ✓  Stock reversed on ' + st.lines.length + ' items', st.ok ? undefined : 'error');
+      else if(st.ok)  showToast('Saved ✓  ' + back + ' of ' + st.lines.length + ' combo items back to stock: ' + st.product);
+      else if(st.reason==='kept-out') showToast('Saved — every combo item was kept out, nothing added to stock');
+      else            showToast('Saved, but the combo restock had a problem: ' + (st.reason||'unknown'),'error');
+    }else if(st && st.attempted){
       if(st.ok && st.reversed)      showToast('Updated ✓  Stock reversed −1 → ' + st.product + '  (' + st.before + ' → ' + st.after + ')');
       else if(st.ok)                showToast('Saved ✓  +1 → ' + st.product + '  (' + st.before + ' → ' + st.after + ')');
       else if(st.reason==='unmapped') showToast('Saved, but NOT restocked — no stock shelf chosen','error');
