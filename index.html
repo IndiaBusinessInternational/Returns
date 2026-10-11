@@ -429,6 +429,32 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 .rep-scroll{max-height:320px;overflow:auto}
 .rep-controls-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:640px){ .rep-controls-row{grid-template-columns:1fr} }
+/* v6.4 (CEO 11 Oct 2026: "edge to edge with no padding") — phones: no outer gutter, full-bleed boxes,
+   10px inner side padding (keeps letters off curved screen edges), never wider than the screen
+   (clip, not hidden, so the sticky top bar keeps working). Spacing only — font sizes unchanged. */
+@media(max-width:640px){
+  html,body{overflow-x:clip}
+  .topbar{padding:0 8px}
+  .hero{padding-left:10px;padding-right:10px}
+  .main{padding-top:8px}
+  .summary-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:0;gap:8px;margin-bottom:8px}
+  .metric{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:10px 10px 8px;overflow-wrap:anywhere}
+  .section-hdr{padding:10px}
+  .form-card{padding:12px 10px;overflow-wrap:anywhere}
+  .edit-banner{padding:10px}
+  .status-bar{padding:8px 10px;margin-bottom:8px}
+  .filter-row{padding:8px 10px}
+  .install-banner,.setup-banner{padding:10px}
+  .lowstock-alert{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:12px 10px;margin-bottom:8px;overflow-wrap:anywhere}
+  .form-grid,.form-grid-3{grid-template-columns:minmax(0,1fr)}
+  .rate-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rep-summary,.rep-summary.six{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .rep-controls-row{grid-template-columns:minmax(0,1fr)}
+  .report-modal{width:100vw;max-height:100dvh;border-radius:0;border-left:0;border-right:0}
+  .report-hdr{padding:12px 10px}
+  .report-body{padding:12px 10px}
+  .report-actions{padding:10px}
+}
 </style>
 </head>
 <body>
@@ -448,7 +474,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.3</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.4</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -679,7 +705,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.3 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.4 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -698,7 +724,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.3 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.4 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -802,7 +828,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.3';
+const APP_VERSION = '6.4';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
