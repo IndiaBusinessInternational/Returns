@@ -438,14 +438,14 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   .hero{padding-left:10px;padding-right:10px}
   .main{padding-top:8px}
   .summary-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:0;gap:8px;margin-bottom:8px}
-  .metric{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:10px 10px 8px;overflow-wrap:anywhere}
+  .metric{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:10px 10px 8px;overflow-wrap:break-word}
   .section-hdr{padding:10px}
-  .form-card{padding:12px 10px;overflow-wrap:anywhere}
+  .form-card{padding:12px 10px;overflow-wrap:break-word}
   .edit-banner{padding:10px}
   .status-bar{padding:8px 10px;margin-bottom:8px}
   .filter-row{padding:8px 10px}
   .install-banner,.setup-banner{padding:10px}
-  .lowstock-alert{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:12px 10px;margin-bottom:8px;overflow-wrap:anywhere}
+  .lowstock-alert{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:12px 10px;margin-bottom:8px;overflow-wrap:break-word}
   .form-grid,.form-grid-3{grid-template-columns:minmax(0,1fr)}
   .rate-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .rep-summary,.rep-summary.six{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
@@ -454,6 +454,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   .report-hdr{padding:12px 10px}
   .report-body{padding:12px 10px}
   .report-actions{padding:10px}
+  button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 }
 </style>
 </head>
@@ -474,7 +475,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.4</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.5</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -705,7 +706,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.4 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.5 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -724,7 +725,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.4 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.5 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -828,7 +829,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.4';
+const APP_VERSION = '6.5';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
