@@ -415,7 +415,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 .plat.shopsy{color:#f6a623}
 .plat.meesho{color:#f43397}
 .plat.shopclues{color:#7ed321}
-.plat.bazaar{color:#b57bff}
+.plat.bazaarin{color:#b57bff}
 .plat.jiomart{color:#2f8fe0}
 .plat.ibi{color:var(--cyan)}
 .order-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--text);word-break:break-all}
@@ -495,7 +495,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.7</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.8</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -602,7 +602,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
           <option>Amazon ATS</option>
           <option>eKart</option>
           <option>Delhivery</option>
-          <option>Bazaar Shipping</option>
+          <option>Bazaar.in Shipping</option>
           <option>JioMart Logistics</option>
         </select>
       </div>
@@ -730,7 +730,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.7 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.8 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -749,7 +749,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.7 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.8 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -853,7 +853,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.7';
+const APP_VERSION = '6.8';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -868,7 +868,7 @@ const PLATFORM_COURIER = {
   'Amazon':'Amazon ATS', 'Amazon Bazaar':'Amazon ATS',
   'Flipkart':'eKart', 'Shopsy':'eKart',
   'Meesho':'Delhivery', 'ShopClues':'Delhivery', 'IBI Website':'Delhivery',
-  'Bazaar.in':'Bazaar Shipping',  // v6.6: bazaar.in (19 Oct 2026) — courier not known yet, picker stays usable
+  'Bazaar.in':'Bazaar.in Shipping',  // v6.6: bazaar.in (19 Oct 2026) — courier not known yet, picker stays usable
   'JioMart':'JioMart Logistics'   // v6.7: JioMart (vendor UEO898) — same
 };
 
@@ -1309,7 +1309,8 @@ function condPill(c){
 function platClass(p){
   const l=String(p||'').toLowerCase();
   if(l.indexOf('amazon')>=0) return 'amazon';   // "Amazon Bazaar" is Amazon — checked first
-  if(l.indexOf('bazaar')>=0) return 'bazaar';
+  // v6.8 (Founder rule): only the full name "Bazaar.in" is Bazaar.in — a bare "Bazaar" gets no platform colour.
+  if(l.replace(/[^a-z]/g,'')==='bazaarin') return 'bazaarin';
   if(l.indexOf('jio')>=0) return 'jiomart';
   if(l.indexOf('flipkart')>=0) return 'flipkart';
   if(l.indexOf('shopsy')>=0) return 'shopsy';
