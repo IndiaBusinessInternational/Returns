@@ -415,6 +415,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 .plat.shopsy{color:#f6a623}
 .plat.meesho{color:#f43397}
 .plat.shopclues{color:#7ed321}
+.plat.bazaar{color:#b57bff}
 .plat.ibi{color:var(--cyan)}
 .order-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--text);word-break:break-all}
 .addr-cell{max-width:230px;font-size:11.5px;color:var(--text2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -456,6 +457,24 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   .report-actions{padding:10px}
   button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 }
+/* v6.6 (Founder 19 Oct 2026; CEO rule 15 Oct: "edge to edge … all web apps") — the same
+   edge-to-edge spacing on EVERY screen, laptops included: no 1180px centred column, full-bleed
+   boxes, 10px inner padding. Phone-only stacking stays in the 640px blocks above. */
+html,body{overflow-x:clip}
+.topbar-inner,.hero-inner,.main{max-width:none}
+.main{padding-left:0;padding-right:0;padding-top:8px}
+.topbar{padding:0 8px}
+.hero{padding-left:10px;padding-right:10px}
+.summary-grid{padding:0;gap:8px;margin-bottom:8px}
+.metric{border-radius:0;border-left:0;border-right:0;box-shadow:none;padding:10px 10px 8px;overflow-wrap:break-word}
+.section-hdr{border-radius:0!important;border-left:0;border-right:0;padding:10px}
+.form-card{border-radius:0;border-left:0;border-right:0;padding:12px 10px;overflow-wrap:break-word}
+.edit-banner{border-radius:0;border-left:0;border-right:0;padding:10px}
+.status-bar{border-radius:0;border-left:0;border-right:0;padding:8px 10px;margin-bottom:8px}
+.table-wrap{border-radius:0;border-left:0;border-right:0}
+.filter-row{padding:8px 10px}
+.install-banner,.setup-banner{padding:10px}
+button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 </style>
 </head>
 <body>
@@ -475,7 +494,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.5</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.6</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -569,6 +588,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
           <option>Shopsy</option>
           <option>Meesho</option>
           <option>ShopClues</option>
+          <option>Bazaar.in</option>
           <option>IBI Website</option>
         </select>
       </div>
@@ -580,6 +600,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
           <option>Amazon ATS</option>
           <option>eKart</option>
           <option>Delhivery</option>
+          <option>Bazaar Shipping</option>
         </select>
       </div>
 
@@ -706,7 +727,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.5 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.6 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -725,7 +746,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.5 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.6 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -829,7 +850,7 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.5';
+const APP_VERSION = '6.6';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -843,7 +864,8 @@ let GAS_URL = (localStorage.getItem(URL_KEY) || '').trim() || DEFAULT_GAS_URL;
 const PLATFORM_COURIER = {
   'Amazon':'Amazon ATS', 'Amazon Bazaar':'Amazon ATS',
   'Flipkart':'eKart', 'Shopsy':'eKart',
-  'Meesho':'Delhivery', 'ShopClues':'Delhivery', 'IBI Website':'Delhivery'
+  'Meesho':'Delhivery', 'ShopClues':'Delhivery', 'IBI Website':'Delhivery',
+  'Bazaar.in':'Bazaar Shipping'   // v6.6: bazaar.in (19 Oct 2026) — courier not known yet, picker stays usable
 };
 
 const PRODUCT_LIST = [
@@ -1282,7 +1304,8 @@ function condPill(c){
 }
 function platClass(p){
   const l=String(p||'').toLowerCase();
-  if(l.indexOf('amazon')>=0) return 'amazon';
+  if(l.indexOf('amazon')>=0) return 'amazon';   // "Amazon Bazaar" is Amazon — checked first
+  if(l.indexOf('bazaar')>=0) return 'bazaar';
   if(l.indexOf('flipkart')>=0) return 'flipkart';
   if(l.indexOf('shopsy')>=0) return 'shopsy';
   if(l.indexOf('meesho')>=0) return 'meesho';
