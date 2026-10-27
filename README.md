@@ -1,4 +1,6 @@
-# Returns v6.9
+# Returns v6.10
+
+v6.10 (27 Oct 2026): top bar fits a 360 px phone with the Share button: the title shortens with "…", the Dark/Light word hides, the version badge always shows.
 
 v6.9 (27 Oct 2026): WhatsApp link preview uses a 1200x630 JPEG banner (og-banner.jpg, image/jpeg); new "Share this app" button in the top bar.
 
