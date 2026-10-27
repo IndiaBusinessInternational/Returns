@@ -21,9 +21,9 @@
 <meta property="og:url" content="https://returns.indiabusinessinternational.online/">
 <meta property="og:title" content="IBI Returns Logger">
 <meta property="og:description" content="Log and analyse marketplace returns — platform, courier, order, product, condition — then browse, search, edit and export every entry.">
-<meta property="og:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
-<meta property="og:image:secure_url" content="https://returns.indiabusinessinternational.online/og-banner.png">
-<meta property="og:image:type" content="image/png">
+<meta property="og:image" content="https://returns.indiabusinessinternational.online/og-banner.jpg">
+<meta property="og:image:secure_url" content="https://returns.indiabusinessinternational.online/og-banner.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="IBI Returns Logger — India Business International">
@@ -32,7 +32,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="IBI Returns Logger">
 <meta name="twitter:description" content="Log and analyse marketplace returns — platform, courier, order, product, condition — then browse, search, edit and export every entry.">
-<meta name="twitter:image" content="https://returns.indiabusinessinternational.online/og-banner.png">
+<meta name="twitter:image" content="https://returns.indiabusinessinternational.online/og-banner.jpg">
 <meta name="twitter:image:alt" content="IBI Returns Logger preview banner">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -477,6 +477,7 @@ html,body{overflow-x:clip}
 .install-banner,.setup-banner{padding:10px}
 button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 </style>
+<script src="ibi-share.js" defer data-slot=".topbar-right"></script>
 </head>
 <body>
 
@@ -495,7 +496,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.8</span></div>
+        <div class="app-name">IBI Returns Logger <span class="ver-badge">v6.9</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -730,7 +731,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.8 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.9 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -749,7 +750,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.8 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.9 &mdash; October 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -853,7 +854,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.8';
+const APP_VERSION = '6.9';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
