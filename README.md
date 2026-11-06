@@ -1,4 +1,6 @@
-# Returns v6.10
+# Returns v6.12
+
+v6.12 (6 Nov 2026): IBI Website returns can record ST Courier (pre-set); JioMart pre-sets Delhivery, as on its first real label. Both can still be changed.
 
 v6.10 (27 Oct 2026): top bar fits a 360 px phone with the Share button: the title shortens with "…", the Dark/Light word hides, the version badge always shows.
 
