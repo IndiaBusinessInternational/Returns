@@ -1,4 +1,7 @@
-# Returns v6.12
+# Returns v6.13
+
+v6.13 (6 Nov 2026): JioMart Logistics removed from the courier list. JioMart orders go by Delhivery (Founder).
+
 
 v6.12 (6 Nov 2026): IBI Website returns can record ST Courier (pre-set); JioMart pre-sets Delhivery, as on its first real label. Both can still be changed.
 
