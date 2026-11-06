@@ -1,4 +1,7 @@
-# Returns v6.13
+# Returns v6.14
+
+v6.14 (6 Nov 2026): MyStore.in and IndiaMart added.
+
 
 v6.13 (6 Nov 2026): JioMart Logistics removed from the courier list. JioMart orders go by Delhivery (Founder).
 

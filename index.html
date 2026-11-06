@@ -417,6 +417,8 @@ select.auto-locked{border-color:var(--info-border);color:var(--info-text)}
 .plat.shopclues{color:#7ed321}
 .plat.bazaarin{color:#b57bff}
 .plat.jiomart{color:#2f8fe0}
+.plat.mystore{color:#22b8a0}
+.plat.indiamart{color:#e8912d}
 .plat.ibi{color:var(--cyan)}
 .order-id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--text);word-break:break-all}
 .addr-cell{max-width:230px;font-size:11.5px;color:var(--text2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -501,7 +503,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name"><span class="app-title-txt">IBI Returns Logger</span> <span class="ver-badge">v6.13</span></div>
+        <div class="app-name"><span class="app-title-txt">IBI Returns Logger</span> <span class="ver-badge">v6.14</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -598,6 +600,8 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
           <option>Bazaar.in</option>
           <option>JioMart</option>
           <option>IBI Website</option>
+          <option>MyStore.in</option>
+          <option>IndiaMart</option>
         </select>
       </div>
 
@@ -736,7 +740,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.13 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.14 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -755,7 +759,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.13 &mdash; November 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.14 &mdash; November 2026 &middot; Product catalogue synced (268 names)</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -859,7 +863,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.13';
+const APP_VERSION = '6.14';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -1318,6 +1322,8 @@ function platClass(p){
   // v6.8 (Founder rule): only the full name "Bazaar.in" is Bazaar.in — a bare "Bazaar" gets no platform colour.
   if(l.replace(/[^a-z]/g,'')==='bazaarin') return 'bazaarin';
   if(l.indexOf('jio')>=0) return 'jiomart';
+  if(l.indexOf('mystore')>=0) return 'mystore';
+  if(l.indexOf('indiamart')>=0) return 'indiamart';
   if(l.indexOf('flipkart')>=0) return 'flipkart';
   if(l.indexOf('shopsy')>=0) return 'shopsy';
   if(l.indexOf('meesho')>=0) return 'meesho';
