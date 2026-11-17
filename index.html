@@ -483,6 +483,13 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 .app-name{display:flex;align-items:center;gap:6px;min-width:0}
 .app-title-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 @media (max-width:420px){.toggle-label{display:none}}
+
+/* one-scroll (17 Nov 2026): the list box has no scroll of its own; the page scrolls; headings stay frozen */
+.tbl-scroll{max-height:none!important;overflow-y:hidden!important;overflow-x:auto!important;overscroll-behavior:auto!important}
+.tbl-scroll.os-fits{overflow:visible!important}
+.tbl-scroll thead th{position:relative!important;top:auto!important}
+.tbl-scroll.os-sticky thead th{position:sticky!important;top:var(--os-top,0px)!important}
+.table-wrap{overflow:visible!important}
 </style>
 <script src="ibi-share.js" defer data-slot=".topbar-right"></script>
 </head>
@@ -503,7 +510,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     <div class="topbar-left">
       <div class="ibi-logo"><svg class="mark"><use href="#ibiMark"/></svg></div>
       <div>
-        <div class="app-name"><span class="app-title-txt">IBI Returns Logger</span> <span class="ver-badge">v6.14</span></div>
+        <div class="app-name"><span class="app-title-txt">IBI Returns Logger</span> <span class="ver-badge">v6.15</span></div>
       </div>
     </div>
     <div class="topbar-right">
@@ -740,7 +747,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
     </div>
   </div>
 
-  <div class="footer">IBI Returns Logger v6.14 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
+  <div class="footer">IBI Returns Logger v6.15 &mdash; India Business International &mdash; indiabusinessinternational@gmail.com</div>
 </div>
 
 <!-- DRAWER MENU -->
@@ -759,7 +766,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
   <button class="drawer-item" onclick="toggleTheme();closeDrawer()"><i class="ti ti-sun"></i> Toggle Dark / Light Mode</button>
   <button class="drawer-item" onclick="closeDrawer();openBackend()"><i class="ti ti-plug"></i> Backend Connection</button>
   <div class="drawer-section-label">About</div>
-  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.14 &mdash; November 2026 &middot; Product catalogue synced (268 names)</div>
+  <div class="drawer-item" style="cursor:default;color:var(--text2);font-size:12px"><i class="ti ti-info-circle"></i> Version 6.15 &mdash; November 2026 &middot; One scroll for the returns list</div>
 </div>
 
 <!-- REPORT MODAL -->
@@ -863,7 +870,7 @@ button,.btn,select,input,[role="button"]{overflow-wrap:normal}
 //                       ⚠ needs the v4.0 Apps Script deployed (getAll action).
 //  v3.8 and earlier   — Write-only form + local "Memory · Tap to Reuse" list.
 // ═══════════════════════════════════════════════════════════════════════════
-const APP_VERSION = '6.14';
+const APP_VERSION = '6.15';
 
 // Same /exec as v3.8 — redeploy the NEW .gs onto this deployment (Manage
 // deployments -> Edit -> New version) so this URL keeps working.
@@ -2371,6 +2378,47 @@ function exportCSV(){
   el('fReturnDate').value = todayISO();
   buildProductList();
   loadAll();
+})();
+</script>
+
+<script>
+/* one-scroll (17 Nov 2026): frozen table headings while the PAGE scrolls (no inner scroll box). */
+(function(){
+  var SEL='.tbl-scroll', BAR='.topbar';
+  function up(el,re,yOnly){
+    for(var p=el.parentElement;p&&p!==document.body&&p!==document.documentElement;p=p.parentElement){
+      var cs=getComputedStyle(p); if(re.test(yOnly?cs.overflowY:cs.overflowY+' '+cs.overflowX)) return p;
+    }
+    return null;
+  }
+  function sync(){
+    var bar=BAR?document.querySelector(BAR):null;
+    var barBottom=bar?Math.max(0,bar.getBoundingClientRect().bottom):0;
+    document.querySelectorAll(SEL).forEach(function(sc){
+      var tb=sc.querySelector('table'); if(!tb||!tb.tHead||!sc.offsetParent) return;
+      var fits=tb.offsetWidth<=sc.clientWidth+1;
+      sc.classList.toggle('os-fits',fits);
+      var scr=up(sc,/(auto|scroll)/,true), clip=up(sc,/(auto|scroll|hidden)/);
+      var scrollerTop=scr?scr.getBoundingClientRect().top:0;
+      var line=Math.max(scrollerTop,barBottom);
+      var ths=tb.tHead.querySelectorAll('th');
+      if(fits&&clip===scr){
+        sc.classList.add('os-sticky'); sc.style.setProperty('--os-top',Math.max(0,line-scrollerTop)+'px');
+        for(var i=0;i<ths.length;i++) if(ths[i].style.transform) ths[i].style.transform='';
+        return;
+      }
+      sc.classList.remove('os-sticky');
+      var r=tb.getBoundingClientRect(), h=tb.tHead.getBoundingClientRect().height;
+      var off=Math.max(0,Math.min(line-r.top,r.height-h));
+      var v=off>0.5?'translateY('+off+'px)':'';
+      for(var k=0;k<ths.length;k++) if(ths[k].style.transform!==v) ths[k].style.transform=v;
+    });
+  }
+  var raf=0; function soon(){ if(!raf) raf=requestAnimationFrame(function(){ raf=0; sync(); }); }
+  window.addEventListener('scroll',soon,{passive:true,capture:true});
+  window.addEventListener('resize',soon);
+  function start(){ soon(); try{ new MutationObserver(soon).observe(document.body,{childList:true,subtree:true}); }catch(e){} }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
 </script>
 </body>
